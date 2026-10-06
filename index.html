@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Teleprompter / טלפרומפטר</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/prompter.css">
+<link rel="stylesheet" href="css/camera.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body class="mode-edit">
+<header id="topbar" class="bar">
+  <button id="btnScripts"><span aria-hidden="true">≡</span> <b data-i18n="scripts"></b></button>
+  <button id="btnLang"><span aria-hidden="true">🌐</span> <b>HE / EN</b></button>
+  <button id="btnCam"><span aria-hidden="true">📷</span> <b data-i18n="camera"></b></button>
+  <button id="btnPip"><span aria-hidden="true">🗗</span> <b data-i18n="pip"></b></button>
+  <button id="btnSettings"><span aria-hidden="true">⚙</span> <b data-i18n="settings"></b></button>
+</header>
+<div id="editbar" class="bar small">
+  <button data-cmd="bold"><b>B</b></button>
+  <button data-cmd="underline"><u>U</u></button>
+  <label class="btn">🎨 <input type="color" id="hlColor" value="#ffd400"></label>
+  <button id="btnBlockSpeed">⚡ <span data-i18n="blockSpeed"></span></button>
+  <input id="titleInput" aria-label="title">
+</div>
+<main id="stage">
+  <video id="cam" playsinline muted autoplay></video>
+  <div id="wrap">
+    <div id="viewport"><div id="text" contenteditable="true" spellcheck="true"></div></div>
+    <div id="guide" aria-hidden="true"></div>
+    <div id="countdown" aria-live="assertive"></div>
+  </div>
+  <div id="clock">00:00</div>
+  <div id="recBadge" hidden>● REC</div>
+</main>
+<footer id="controls" class="bar">
+  <div class="row">
+    <button id="btnBack">⏪ -10s</button>
+    <button id="btnPlay" class="primary"><span id="playIcon">▶</span> <b id="playLabel"></b></button>
+    <button id="btnFwd">⏩ +10s</button>
+    <button id="btnStop">⏹ <b data-i18n="stop"></b></button>
+  </div>
+  <div class="row">
+    <label class="grow">⚙ <b data-i18n="speed"></b> <input type="range" id="speed" min="1" max="100" data-s="speed"></label>
+    <button id="btnRec">⏺ <b id="recLabel"></b></button>
+    <button id="btnHide">👁 <b data-i18n="hide"></b></button>
+  </div>
+</footer>
+
+<dialog id="dlgScripts"><div class="dlg"><h2 data-i18n="scripts"></h2>
+  <div class="row"><button id="newScript" class="primary">＋ <b data-i18n="new"></b></button>
+  <label class="btn">⬆ <b data-i18n="import"></b><input type="file" id="importFile" accept=".txt,.json" hidden></label>
+  <button id="exportAll">⬇ <b data-i18n="exportAll"></b></button></div>
+  <ul id="scriptList"></ul><button class="close" data-close><b data-i18n="close"></b></button></div></dialog>
+
+<dialog id="dlgSettings"><div class="dlg"><h2 data-i18n="settings"></h2>
+  <label><span data-i18n="fontSize"></span><input type="range" min="20" max="140" data-s="fontSize"></label>
+  <label><span data-i18n="lineHeight"></span><input type="range" min="1" max="2.6" step=".1" data-s="lineHeight"></label>
+  <label><span data-i18n="letterSpacing"></span><input type="range" min="0" max="12" step=".5" data-s="letterSpacing"></label>
+  <label><span data-i18n="width"></span><input type="range" min="40" max="100" data-s="width"></label>
+  <label><span data-i18n="font"></span><select data-s="font"><option value="sans">Sans-serif</option><option value="serif">Serif</option><option value="mono">Monospace</option><option value="dyslexic">Dyslexic-friendly</option></select></label>
+  <label><span data-i18n="align"></span><select data-s="align"><option value="center">Center</option><option value="start">Start</option><option value="end">End</option></select></label>
+  <label><span data-i18n="theme"></span><select data-s="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="custom">Custom</option></select></label>
+  <label><span data-i18n="bgColor"></span><input type="color" data-s="bgColor"></label>
+  <label><span data-i18n="fgColor"></span><input type="color" data-s="fgColor"></label>
+  <label><span data-i18n="direction"></span><select data-s="direction"><option value="up">⬆ Top→Bottom</option><option value="down">⬇ Bottom→Top</option></select></label>
+  <label><span data-i18n="countdown"></span><select data-s="countdown" data-num><option value="0">0</option><option value="3">3s</option><option value="5">5s</option><option value="10">10s</option></select></label>
+  <label><span data-i18n="resume"></span><input type="range" min="0" max="6" step=".5" data-s="resumeDelay"></label>
+  <label><span data-i18n="camOpacity"></span><input type="range" min="0" max="95" data-s="overlay"></label>
+  <label class="chk"><input type="checkbox" data-s="mirrorH"> <span data-i18n="mirrorH"></span></label>
+  <label class="chk"><input type="checkbox" data-s="mirrorV"> <span data-i18n="mirrorV"></span></label>
+  <label class="chk"><input type="checkbox" data-s="guide"> <span data-i18n="guide"></span></label>
+  <label class="chk"><input type="checkbox" data-s="voice"> <span data-i18n="voice"></span></label>
+  <button class="close" data-close><b data-i18n="close"></b></button></div></dialog>
+
+<dialog id="dlgRec"><div class="dlg"><h2 data-i18n="recording"></h2><video id="recVideo" controls playsinline></video>
+  <div class="row"><a id="recDl" class="btn primary">⬇ <b data-i18n="download"></b></a><button data-close><b data-i18n="close"></b></button></div></div></dialog>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

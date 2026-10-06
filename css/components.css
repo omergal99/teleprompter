@@ -1,0 +1,11 @@
+dialog{border:0;border-radius:18px;padding:0;background:#1b1b1f;color:#fff;width:min(94vw,520px);max-height:90dvh}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+.dlg{padding:16px;display:flex;flex-direction:column;gap:12px}.dlg h2{margin:0}
+.dlg>label{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.dlg>label.chk{justify-content:flex-start}.dlg input[type=checkbox]{width:28px;height:28px}
+.dlg input[type=range]{flex:1;max-width:60%;height:32px}.dlg input[type=color]{width:64px;height:40px}
+.dlg select{min-width:150px}
+#scriptList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:50dvh;overflow:auto}
+#scriptList li{background:#2c2c33;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+#scriptList li.active{outline:3px solid var(--accent)}#scriptList small{opacity:.75}
+#scriptList .row{justify-content:flex-start}#scriptList button{min-height:40px;padding:2px 10px}
