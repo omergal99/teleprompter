@@ -1,84 +1,15 @@
 <!doctype html>
-<html lang="he" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>Teleprompter / טלפרומפטר</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon.svg">
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/prompter.css">
-<link rel="stylesheet" href="css/camera.css">
-<link rel="stylesheet" href="css/components.css">
-</head>
-<body class="mode-edit">
-<header id="topbar" class="bar">
-  <button id="btnScripts"><span aria-hidden="true">≡</span> <b data-i18n="scripts"></b></button>
-  <button id="btnLang"><span aria-hidden="true">🌐</span> <b>HE / EN</b></button>
-  <button id="btnCam"><span aria-hidden="true">📷</span> <b data-i18n="camera"></b></button>
-  <button id="btnPip"><span aria-hidden="true">🗗</span> <b data-i18n="pip"></b></button>
-  <button id="btnSettings"><span aria-hidden="true">⚙</span> <b data-i18n="settings"></b></button>
-</header>
-<div id="editbar" class="bar small">
-  <button data-cmd="bold"><b>B</b></button>
-  <button data-cmd="underline"><u>U</u></button>
-  <label class="btn">🎨 <input type="color" id="hlColor" value="#ffd400"></label>
-  <button id="btnBlockSpeed">⚡ <span data-i18n="blockSpeed"></span></button>
-  <input id="titleInput" aria-label="title">
-</div>
-<main id="stage">
-  <video id="cam" playsinline muted autoplay></video>
-  <div id="wrap">
-    <div id="viewport"><div id="text" contenteditable="true" spellcheck="true"></div></div>
-    <div id="guide" aria-hidden="true"></div>
-    <div id="countdown" aria-live="assertive"></div>
-  </div>
-  <div id="clock">00:00</div>
-  <div id="recBadge" hidden>● REC</div>
-</main>
-<footer id="controls" class="bar">
-  <div class="row">
-    <button id="btnBack">⏪ -10s</button>
-    <button id="btnPlay" class="primary"><span id="playIcon">▶</span> <b id="playLabel"></b></button>
-    <button id="btnFwd">⏩ +10s</button>
-    <button id="btnStop">⏹ <b data-i18n="stop"></b></button>
-  </div>
-  <div class="row">
-    <label class="grow">⚙ <b data-i18n="speed"></b> <input type="range" id="speed" min="1" max="100" data-s="speed"></label>
-    <button id="btnRec">⏺ <b id="recLabel"></b></button>
-    <button id="btnHide">👁 <b data-i18n="hide"></b></button>
-  </div>
-</footer>
-
-<dialog id="dlgScripts"><div class="dlg"><h2 data-i18n="scripts"></h2>
-  <div class="row"><button id="newScript" class="primary">＋ <b data-i18n="new"></b></button>
-  <label class="btn">⬆ <b data-i18n="import"></b><input type="file" id="importFile" accept=".txt,.json" hidden></label>
-  <button id="exportAll">⬇ <b data-i18n="exportAll"></b></button></div>
-  <ul id="scriptList"></ul><button class="close" data-close><b data-i18n="close"></b></button></div></dialog>
-
-<dialog id="dlgSettings"><div class="dlg"><h2 data-i18n="settings"></h2>
-  <label><span data-i18n="fontSize"></span><input type="range" min="20" max="140" data-s="fontSize"></label>
-  <label><span data-i18n="lineHeight"></span><input type="range" min="1" max="2.6" step=".1" data-s="lineHeight"></label>
-  <label><span data-i18n="letterSpacing"></span><input type="range" min="0" max="12" step=".5" data-s="letterSpacing"></label>
-  <label><span data-i18n="width"></span><input type="range" min="40" max="100" data-s="width"></label>
-  <label><span data-i18n="font"></span><select data-s="font"><option value="sans">Sans-serif</option><option value="serif">Serif</option><option value="mono">Monospace</option><option value="dyslexic">Dyslexic-friendly</option></select></label>
-  <label><span data-i18n="align"></span><select data-s="align"><option value="center">Center</option><option value="start">Start</option><option value="end">End</option></select></label>
-  <label><span data-i18n="theme"></span><select data-s="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="custom">Custom</option></select></label>
-  <label><span data-i18n="bgColor"></span><input type="color" data-s="bgColor"></label>
-  <label><span data-i18n="fgColor"></span><input type="color" data-s="fgColor"></label>
-  <label><span data-i18n="direction"></span><select data-s="direction"><option value="up">⬆ Top→Bottom</option><option value="down">⬇ Bottom→Top</option></select></label>
-  <label><span data-i18n="countdown"></span><select data-s="countdown" data-num><option value="0">0</option><option value="3">3s</option><option value="5">5s</option><option value="10">10s</option></select></label>
-  <label><span data-i18n="resume"></span><input type="range" min="0" max="6" step=".5" data-s="resumeDelay"></label>
-  <label><span data-i18n="camOpacity"></span><input type="range" min="0" max="95" data-s="overlay"></label>
-  <label class="chk"><input type="checkbox" data-s="mirrorH"> <span data-i18n="mirrorH"></span></label>
-  <label class="chk"><input type="checkbox" data-s="mirrorV"> <span data-i18n="mirrorV"></span></label>
-  <label class="chk"><input type="checkbox" data-s="guide"> <span data-i18n="guide"></span></label>
-  <label class="chk"><input type="checkbox" data-s="voice"> <span data-i18n="voice"></span></label>
-  <button class="close" data-close><b data-i18n="close"></b></button></div></dialog>
-
-<dialog id="dlgRec"><div class="dlg"><h2 data-i18n="recording"></h2><video id="recVideo" controls playsinline></video>
-  <div class="row"><a id="recDl" class="btn primary">⬇ <b data-i18n="download"></b></a><button data-close><b data-i18n="close"></b></button></div></div></dialog>
-<script type="module" src="js/app.js"></script>
-</body>
-</html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e1013"><title>Teleprompter / טלפרומפטר</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icons/icon.svg">
+<link rel="stylesheet" href="css/main.css"><link rel="stylesheet" href="css/prompter.css"><link rel="stylesheet" href="css/camera.css"><link rel="stylesheet" href="css/components.css"></head>
+<body class="mode-edit"><svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16l13-8z" fill="currentColor"/></symbol><symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></symbol><symbol id="i-stop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></symbol><symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6l-7 6 7 6zM20 6l-7 6 7 6z"/></symbol><symbol id="i-fwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6l7 6-7 6zM4 6l7 6-7 6z"/></symbol><symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM16 11l6-3v8l-6-3z"/></symbol><symbol id="i-pip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3zM12 12h7v5h-7z"/></symbol><symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol><symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-eyeoff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 6.1A9 9 0 0 1 12 6c5 0 8.5 4 9.5 6a14 14 0 0 1-2.8 3.6M6.5 7.6A14 14 0 0 0 2.5 12c1 2 4.5 6 9.5 6 1.5 0 2.8-.4 4-.9"/></symbol><symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12C3.5 10 7 6 12 6s8.5 4 9.5 6c-1 2-4.5 6-9.5 6s-8.5-4-9.5-6z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></symbol><symbol id="i-rec" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7" fill="currentColor"/></symbol><symbol id="i-type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><text x="1" y="18" font-size="16" font-weight="700" fill="currentColor" stroke="none">Aa</text></symbol><symbol id="i-bold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></symbol><symbol id="i-under" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v7a5 5 0 0 0 10 0V4M5 20h14"/></symbol><symbol id="i-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 0 0 3-3A9 9 0 0 0 12 3z"/></symbol><symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol><symbol id="i-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6M20 20v-6h-6M20 10A8 8 0 0 0 6 6L4 10M4 14a8 8 0 0 0 14 4l2-4"/></symbol><symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8h12v12H8zM4 16V4h12"/></symbol><symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol><symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></symbol><symbol id="i-dots" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></symbol><symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3"/></symbol></svg>
+<header id="topbar"><button class="ic" id="btnScripts" aria-label="Scripts"><svg class="i"><use href="#i-list"/></svg></button><input id="titleInput" aria-label="Title" autocomplete="off"><button class="ic" id="btnText" aria-label="Text"><svg class="i"><use href="#i-type"/></svg></button><button class="ic" id="btnSettings" aria-label="Settings"><svg class="i"><use href="#i-sliders"/></svg></button><button class="ic" id="btnMenu" aria-label="More"><svg class="i"><use href="#i-dots"/></svg></button></header>
+<div id="editbar"><button class="ic" data-cmd="bold" aria-label="Bold"><svg class="i"><use href="#i-bold"/></svg></button><button class="ic" data-cmd="underline" aria-label="Underline"><svg class="i"><use href="#i-under"/></svg></button><label class="ic" aria-label="Color"><svg class="i"><use href="#i-color"/></svg><input type="color" id="hlColor" value="#ffd400"></label><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed"><svg class="i"><use href="#i-zap"/></svg></button>
+<div id="speedPop" hidden><small data-i18n="blockSpeed"></small><div><button data-v="0.5">0.5×</button><button data-v="0.75">0.75×</button><button data-v="1">1×</button><button data-v="1.5">1.5×</button><button data-v="2">2×</button></div></div></div>
+<main id="stage"><video id="cam" playsinline muted autoplay></video><div id="wrap"><div id="viewport"><div id="text" contenteditable="true" spellcheck="true"></div></div><div id="guide"></div><div id="countdown"></div></div><div id="clock">00:00</div><div id="recBadge" hidden>REC</div></main>
+<footer id="controls"><div class="tr"><button class="ic" id="btnStop" aria-label="Stop"><svg class="i"><use href="#i-stop"/></svg></button><button class="ic" id="btnEdit" aria-label="Edit"><svg class="i"><use href="#i-pencil"/></svg></button><button class="ic sk" id="btnBack" aria-label="-10s"><svg class="i"><use href="#i-back"/></svg><b>10</b></button><button class="play" id="btnPlay" aria-label="Play"><span id="playIcon"><svg class="i"><use href="#i-play"/></svg></span></button><button class="ic sk" id="btnFwd" aria-label="+10s"><b>10</b><svg class="i"><use href="#i-fwd"/></svg></button><button class="ic rec" id="btnRec" aria-label="Record"><svg class="i"><use href="#i-rec"/></svg></button><button class="ic" id="btnHide" aria-label="Hide controls"><svg class="i"><use href="#i-eyeoff"/></svg></button></div>
+<label class="spd"><svg class="i"><use href="#i-zap"/></svg><input type="range" id="speed" min="1" max="100" data-s="speed" aria-label="Speed"><output></output></label></footer>
+<button class="ic" id="showUi" hidden aria-label="Show controls"><svg class="i"><use href="#i-eye"/></svg></button>
+<dialog id="dlgMenu" class="sheet menu"><header><h2 data-i18n="more"></h2><button class="ic" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header><div class="body"><button class="item" id="mCam"><svg class="i"><use href="#i-cam"/></svg><span data-i18n="camera"></span></button><button class="item" id="mPip"><svg class="i"><use href="#i-pip"/></svg><span data-i18n="pip"></span></button><button class="item" id="mRot"><svg class="i"><use href="#i-rotate"/></svg><span data-i18n="rotate"></span></button><button class="item" id="mSet"><svg class="i"><use href="#i-sliders"/></svg><span data-i18n="settings"></span></button></div></dialog><dialog id="dlgText" class="sheet dock"><header><h2 data-i18n="text"></h2><button class="ic" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header><div class="body"><label class="fld"><span data-i18n="fontSize"></span><input type="range" min="20" max="140" step="1" data-s="fontSize"><output></output></label><label class="fld"><span data-i18n="lineHeight"></span><input type="range" min="1" max="2.6" step="0.1" data-s="lineHeight"><output></output></label><label class="fld"><span data-i18n="letterSpacing"></span><input type="range" min="0" max="12" step="0.5" data-s="letterSpacing"><output></output></label><label class="fld"><span data-i18n="width"></span><input type="range" min="40" max="100" step="1" data-s="width"><output></output></label><label class="fld"><span data-i18n="font"></span><select data-s="font"><option value="sans">Sans-serif</option><option value="serif">Serif</option><option value="mono">Monospace</option><option value="dyslexic">Dyslexic-friendly</option></select></label><label class="fld"><span data-i18n="align"></span><select data-s="align"><option value="center">Center</option><option value="start">Start</option><option value="end">End</option></select></label><label class="fld"><span data-i18n="theme"></span><select data-s="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="custom">Custom</option></select></label><label class="fld"><span data-i18n="bgColor"></span><input type="color" data-s="bgColor"></label><label class="fld"><span data-i18n="fgColor"></span><input type="color" data-s="fgColor"></label></div></dialog><dialog id="dlgSettings" class="sheet "><header><h2 data-i18n="settings"></h2><button class="ic" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header><div class="body"><label class="fld"><span data-i18n="language"></span><select data-s="lang"><option value="he">עברית</option><option value="en">English</option></select></label><label class="fld"><span data-i18n="countdownOn"></span><input type="checkbox" class="sw" data-s="countdownOn"></label><label class="fld"><span data-i18n="countdown"></span><select data-s="countdown"><option value="3">3s</option><option value="5">5s</option><option value="10">10s</option></select></label><label class="fld"><span data-i18n="resume"></span><input type="range" min="0" max="6" step="0.5" data-s="resumeDelay"><output></output></label><label class="fld"><span data-i18n="direction"></span><select data-s="direction"><option value="up">⬆</option><option value="down">⬇</option></select></label><label class="fld"><span data-i18n="camOpacity"></span><input type="range" min="0" max="95" step="1" data-s="overlay"><output></output></label><label class="fld"><span data-i18n="mirrorH"></span><input type="checkbox" class="sw" data-s="mirrorH"></label><label class="fld"><span data-i18n="mirrorV"></span><input type="checkbox" class="sw" data-s="mirrorV"></label><label class="fld"><span data-i18n="guide"></span><input type="checkbox" class="sw" data-s="guide"></label><label class="fld"><span data-i18n="voice"></span><input type="checkbox" class="sw" data-s="voice"></label></div></dialog>
+<dialog id="dlgScripts" class="sheet "><header><h2 data-i18n="scripts"></h2><button class="ic" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header><div class="body"><div class="acts"><button class="btn primary" id="newScript"><svg class="i"><use href="#i-plus"/></svg><span data-i18n="new"></span></button><label class="btn"><svg class="i"><use href="#i-up"/></svg><span data-i18n="import"></span><input type="file" id="importFile" accept=".txt,.json" hidden></label><button class="btn" id="exportAll"><svg class="i"><use href="#i-down"/></svg><span data-i18n="exportAll"></span></button></div><ul id="scriptList"></ul></div></dialog>
+<dialog id="dlgRec" class="sheet "><header><h2 data-i18n="recording"></h2><button class="ic" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header><div class="body"><video id="recVideo" controls playsinline></video><div class="acts"><a id="recDl" class="btn primary"><svg class="i"><use href="#i-down"/></svg><span data-i18n="download"></span></a></div></div></dialog>
+<script type="module" src="js/app.js"></script></body></html>

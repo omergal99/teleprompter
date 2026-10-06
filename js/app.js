@@ -22,34 +22,37 @@ function applyStyle(s){const th=s.theme==='light'?['#fff','#000']:s.theme==='cus
  vp.style.transform=`scale(${s.mirrorH?-1:1},${s.mirrorV?-1:1})`;body.classList.toggle('guide-on',s.guide);applyLang(s.lang);updateLabels()}
 
 const prompter=new Prompter(vp,text,()=>store.get(),{onTick:e=>$('clock').textContent=String(e/60|0).padStart(2,'0')+':'+String(e%60|0).padStart(2,'0'),onEnd:()=>updateLabels()});
-const editor=mountEditor({text,titleInput:$('titleInput'),askSpeed:v=>prompt(t('speedAsk'),v),
+const editor=mountEditor({text,titleInput:$('titleInput'),
  onChange:(html,title)=>{const s=scripts.find(x=>x.id===store.get().current);if(!s)return;s.html=html;s.title=title;s.updated=Date.now();St.saveScripts(scripts)}});
 const saveAll=a=>{scripts=a;St.saveScripts(a)};
 const list=mountScriptList({dlg:$('dlgScripts'),list:$('scriptList'),getAll:()=>scripts,setAll:saveAll,getCurrent:()=>store.get().current,
  open:id=>{const s=scripts.find(x=>x.id===id)||scripts[0];if(!s)return;store.set({current:s.id});editor.load(s);setMode('edit');prompter.reset()}});
 
-function setMode(m){body.classList.toggle('mode-present',m==='present');body.classList.toggle('mode-edit',m==='edit');editor.setEditable(m==='edit');if(m==='edit')body.classList.remove('hide-ui');updateLabels()}
-function updateLabels(){const run=prompter.running||!!cdTimer;$('playIcon').textContent=run?'⏸':'▶';$('playLabel').textContent=t(run?'pause':'start');$('recLabel').textContent=t(cam.recording?'recStop':'rec');$('recBadge').hidden=!cam.recording}
+function setMode(m){const was=body.classList.contains('mode-present'),pt=Math.round(vp.clientHeight*.4);document.documentElement.style.setProperty('--pt',pt+'px');
+ body.classList.toggle('mode-present',m==='present');body.classList.toggle('mode-edit',m==='edit');editor.setEditable(m==='edit');
+ if(m==='present'&&!was)vp.scrollTop+=pt-12;if(m==='edit'&&was)vp.scrollTop=Math.max(0,vp.scrollTop-(pt-12));if(m==='edit')body.classList.remove('hide-ui');updateLabels()}
+function updateLabels(){const run=prompter.running||!!cdTimer;$('playIcon').firstChild.firstElementChild.setAttribute('href',run?'#i-pause':'#i-play');$('btnRec').classList.toggle('on',cam.recording);$('recBadge').hidden=!cam.recording}
 function countdown(sec){return new Promise(res=>{const el=$('countdown');let n=sec;if(n<=0)return res(true);el.style.display='flex';el.textContent=n;
  cdTimer=setInterval(()=>{n--;if(n<=0){clearInterval(cdTimer);cdTimer=0;el.style.display='none';res(true)}else el.textContent=n},1000);
  cancelCd=()=>{clearInterval(cdTimer);cdTimer=0;el.style.display='none';res(false)}})}
 async function play(){if(cdTimer){cancelCd();updateLabels();return}if(prompter.running){prompter.pause();updateLabels();return}
  if(body.classList.contains('mode-edit'))setMode('present');updateLabels();
- if(prompter.elapsed===0&&vp.scrollTop<5&&await countdown(store.get().countdown)===false)return;
+ if(prompter.elapsed===0&&vp.scrollTop<5&&store.get().countdownOn&&await countdown(store.get().countdown)===false)return;
  prompter.start();updateLabels()}
 const stop=()=>{cancelCd();prompter.reset();$('clock').textContent='00:00';setMode('edit');updateLabels()};
 const toggleCam=async on=>{try{on?await cam.start(store.get().facing):cam.stop();body.classList.toggle('cam-on',on);applyStyle(store.get())}catch{alert(t('noCam'))}};
 const voice=new Voice(c=>c==='start'?(prompter.running||play()):c==='stop'?stop():(prompter.running&&(prompter.pause(),updateLabels())));
 
 $('btnPlay').onclick=play;$('btnStop').onclick=stop;$('btnBack').onclick=()=>prompter.seek(-10);$('btnFwd').onclick=()=>prompter.seek(10);
-$('btnHide').onclick=e=>{e.stopPropagation();if(body.classList.contains('mode-present'))body.classList.add('hide-ui')};
+$('btnHide').onclick=()=>body.classList.add('hide-ui');$('showUi').onclick=()=>body.classList.remove('hide-ui');
 $('stage').addEventListener('click',()=>body.classList.remove('hide-ui'));
-$('btnLang').onclick=()=>store.set({lang:store.get().lang==='he'?'en':'he'});
-$('btnScripts').onclick=()=>{list.render();$('dlgScripts').showModal()};$('btnSettings').onclick=()=>$('dlgSettings').showModal();
-$('btnCam').onclick=()=>toggleCam(!cam.on);
+$('btnEdit').onclick=()=>{prompter.pause();setMode('edit')};$('btnText').onclick=()=>$('dlgText').show();
+$('btnMenu').onclick=()=>$('dlgMenu').showModal();const via=(id,f)=>$(id).onclick=()=>{$('dlgMenu').close();f()};
+via('mCam',()=>toggleCam(!cam.on));via('mSet',()=>$('dlgSettings').showModal());
+via('mRot',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();await screen.orientation.lock(screen.orientation.type.startsWith('landscape')?'portrait':'landscape')}catch{}});
+via('mPip',async()=>{if(!pipSupported())return alert(t('noPip'));if(pipWin){pipWin.close();return}try{pipWin=await openPip($('wrap'),()=>{pipWin=null});applyStyle(store.get())}catch(e){console.error(e)}});
+$('btnScripts').onclick=()=>{list.render();$('dlgScripts').showModal()};$('btnSettings').onclick=()=>$('dlgSettings').showModal();addEventListener('resize',()=>document.documentElement.style.setProperty('--pt',Math.round(vp.clientHeight*.4)+'px'));
 $('cam').ondblclick=async()=>{if(cam.on){store.set({facing:store.get().facing==='user'?'environment':'user'});await toggleCam(true)}};
-$('btnPip').onclick=async()=>{if(!pipSupported())return alert(t('noPip'));if(pipWin){pipWin.close();return}
- try{pipWin=await openPip($('wrap'),()=>{pipWin=null});applyStyle(store.get())}catch(e){console.error(e)}};
 $('btnRec').onclick=async()=>{if(cam.recording){const {blob,ext}=await cam.stopRec();updateLabels();const u=URL.createObjectURL(blob);$('recVideo').src=u;$('recDl').href=u;$('recDl').download=`teleprompter-${Date.now()}.${ext}`;$('dlgRec').showModal();return}
  if(!cam.on)await toggleCam(true);if(!cam.on)return;try{cam.startRec();updateLabels();if(!prompter.running)play()}catch{alert(t('noCam'))}};
 $('dlgRec').addEventListener('close',()=>$('recVideo').pause());
