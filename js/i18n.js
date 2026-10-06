@@ -1,6 +1,128 @@
-const D={he:{scripts:'סקריפטים',camera:'מצלמה',pip:'צף',settings:'הגדרות',start:'הפעל',pause:'השהה',stop:'עצור',speed:'מהירות',hide:'הסתר',new:'חדש',import:'ייבוא',exportAll:'ייצוא הכל',close:'סגור',fontSize:'גודל גופן',lineHeight:'מרווח שורות',letterSpacing:'מרווח אותיות',width:'רוחב טקסט %',font:'גופן',align:'יישור',theme:'ערכת נושא',bgColor:'צבע רקע',fgColor:'צבע טקסט',direction:'כיוון גלילה',countdown:'ספירה לאחור',resume:'המשך אוטומטי (שנ׳)',camOpacity:'כהות מעל המצלמה',mirrorH:'היפוך אופקי (מראה)',mirrorV:'היפוך אנכי',guide:'קו קריאה',voice:'שליטה קולית (התחל/עצור/השהה)',blockSpeed:'מהירות פסקה',rec:'הקלט',recStop:'עצור הקלטה',recording:'הקלטה',download:'הורדה',open:'פתח',rename:'שנה שם',dup:'שכפל',del:'מחק',words:'מילים',min:'דק׳',confirmDel:'למחוק את הסקריפט?',newTitle:'שם חדש:',untitled:'ללא שם',speedAsk:'מכפיל מהירות לפסקה (0.5 = איטי, 2 = מהיר, ריק = רגיל):',noPip:'הדפדפן לא תומך בחלון צף (Document PiP). נסו Chrome/Edge במחשב.',noCam:'לא ניתן לגשת למצלמה'},
-en:{scripts:'Scripts',camera:'Camera',pip:'Float',settings:'Settings',start:'Start',pause:'Pause',stop:'Stop',speed:'Speed',hide:'Hide',new:'New',import:'Import',exportAll:'Export all',close:'Close',fontSize:'Font size',lineHeight:'Line spacing',letterSpacing:'Letter spacing',width:'Text width %',font:'Font',align:'Alignment',theme:'Theme',bgColor:'Background',fgColor:'Text color',direction:'Scroll direction',countdown:'Start countdown',resume:'Auto-resume (s)',camOpacity:'Dim over camera',mirrorH:'Horizontal flip (mirror)',mirrorV:'Vertical flip',guide:'Reading line',voice:'Voice control (start/stop/pause)',blockSpeed:'Block speed',rec:'Record',recStop:'Stop rec',recording:'Recording',download:'Download',open:'Open',rename:'Rename',dup:'Duplicate',del:'Delete',words:'words',min:'min',confirmDel:'Delete this script?',newTitle:'New name:',untitled:'Untitled',speedAsk:'Speed multiplier for this block (0.5 slow, 2 fast, empty = normal):',noPip:'Floating window (Document PiP) is not supported in this browser. Try desktop Chrome/Edge.',noCam:'Cannot access camera'}};
-let lang='he';export const t=k=>D[lang][k]??k;export const getLang=()=>lang;
-export function applyLang(l){lang=l;const h=document.documentElement;h.lang=l;h.dir=l==='he'?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));}
-Object.assign(D.he,{more:'עוד',text:'טקסט',language:'שפה',rotate:'סיבוב מסך / מסך מלא',countdownOn:'ספירה לאחור לפני התחלה'});
-Object.assign(D.en,{more:'More',text:'Text',language:'Language',rotate:'Rotate / fullscreen',countdownOn:'Countdown before start'});
+const D = {
+  he: {
+    scripts: "סקריפטים",
+    camera: "מצלמה",
+    pip: "צף",
+    settings: "הגדרות",
+    start: "הפעל",
+    pause: "השהה",
+    stop: "עצור",
+    speed: "מהירות",
+    hide: "הסתר",
+    new: "חדש",
+    import: "ייבוא",
+    exportAll: "ייצוא הכל",
+    close: "סגור",
+    fontSize: "גודל גופן",
+    lineHeight: "מרווח שורות",
+    letterSpacing: "מרווח אותיות",
+    width: "רוחב טקסט %",
+    font: "גופן",
+    align: "יישור",
+    theme: "ערכת נושא",
+    bgColor: "צבע רקע",
+    fgColor: "צבע טקסט",
+    direction: "כיוון גלילה",
+    countdown: "ספירה לאחור",
+    resume: "המשך אוטומטי (שנ׳)",
+    camOpacity: "כהות מעל המצלמה",
+    mirrorH: "היפוך אופקי (מראה)",
+    mirrorV: "היפוך אנכי",
+    guide: "קו קריאה",
+    voice: "שליטה קולית (התחל/עצור/השהה)",
+    blockSpeed: "מהירות פסקה",
+    rec: "הקלט",
+    recStop: "עצור הקלטה",
+    recording: "הקלטה",
+    download: "הורדה",
+    open: "פתח",
+    rename: "שנה שם",
+    dup: "שכפל",
+    del: "מחק",
+    words: "מילים",
+    min: "דק׳",
+    confirmDel: "למחוק את הסקריפט?",
+    newTitle: "שם חדש:",
+    untitled: "ללא שם",
+    speedAsk: "מכפיל מהירות לפסקה (0.5 = איטי, 2 = מהיר, ריק = רגיל):",
+    noPip: "הדפדפן לא תומך בחלון צף (Document PiP). נסו Chrome/Edge במחשב.",
+    noCam: "לא ניתן לגשת למצלמה",
+  },
+  en: {
+    scripts: "Scripts",
+    camera: "Camera",
+    pip: "Float",
+    settings: "Settings",
+    start: "Start",
+    pause: "Pause",
+    stop: "Stop",
+    speed: "Speed",
+    hide: "Hide",
+    new: "New",
+    import: "Import",
+    exportAll: "Export all",
+    close: "Close",
+    fontSize: "Font size",
+    lineHeight: "Line spacing",
+    letterSpacing: "Letter spacing",
+    width: "Text width %",
+    font: "Font",
+    align: "Alignment",
+    theme: "Theme",
+    bgColor: "Background",
+    fgColor: "Text color",
+    direction: "Scroll direction",
+    countdown: "Start countdown",
+    resume: "Auto-resume (s)",
+    camOpacity: "Dim over camera",
+    mirrorH: "Horizontal flip (mirror)",
+    mirrorV: "Vertical flip",
+    guide: "Reading line",
+    voice: "Voice control (start/stop/pause)",
+    blockSpeed: "Block speed",
+    rec: "Record",
+    recStop: "Stop rec",
+    recording: "Recording",
+    download: "Download",
+    open: "Open",
+    rename: "Rename",
+    dup: "Duplicate",
+    del: "Delete",
+    words: "words",
+    min: "min",
+    confirmDel: "Delete this script?",
+    newTitle: "New name:",
+    untitled: "Untitled",
+    speedAsk:
+      "Speed multiplier for this block (0.5 slow, 2 fast, empty = normal):",
+    noPip:
+      "Floating window (Document PiP) is not supported in this browser. Try desktop Chrome/Edge.",
+    noCam: "Cannot access camera",
+  },
+};
+let lang = "he";
+export const t = (k) => D[lang][k] ?? k;
+export const getLang = () => lang;
+export function applyLang(l) {
+  lang = l;
+  const h = document.documentElement;
+  h.lang = l;
+  h.dir = l === "he" ? "rtl" : "ltr";
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach((e) => (e.textContent = t(e.dataset.i18n)));
+}
+Object.assign(D.he, {
+  more: "עוד",
+  text: "טקסט",
+  language: "שפה",
+  rotate: "סיבוב מסך / מסך מלא",
+  countdownOn: "ספירה לאחור לפני התחלה",
+});
+Object.assign(D.en, {
+  more: "More",
+  text: "Text",
+  language: "Language",
+  rotate: "Rotate / fullscreen",
+  countdownOn: "Countdown before start",
+});
