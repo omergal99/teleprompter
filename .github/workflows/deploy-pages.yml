@@ -1,0 +1,54 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify static site
+        run: |
+          set -euo pipefail
+          test -f index.html || { echo "::error title=Missing file::index.html not found at repo root"; exit 1; }
+          test -f sw.js || { echo "::error title=Missing file::sw.js not found at repo root"; exit 1; }
+          # fail on absolute root paths that break project subpath pages (omergal99.github.io/teleprompter/)
+          if grep -rEn '(src|href)="/' index.html js css manifest.json 2>/dev/null; then
+            echo "::error title=Absolute path::Use relative paths (./ or no leading /) for GitHub Pages project sites"
+            exit 1
+          fi
+          # syntax-check all JS (incl. service worker) with plain node, no deps
+          for f in js/*.js js/components/*.js sw.js; do
+            node --input-type=module --check < "$f" || exit 1
+          done
+          echo "OK: static site verified"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # no build step: this repo IS the static site (served from root)
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
