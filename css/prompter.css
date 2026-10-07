@@ -61,9 +61,31 @@ body.mode-present #text [data-speed] {
   box-shadow: 0 0 12px rgba(255, 212, 0, 0.6);
   pointer-events: none;
   display: none;
+  z-index: 4;
 }
 body.mode-present.guide-on #guide {
   display: block;
+}
+#emptyState {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--mut);
+  padding: 24px;
+  pointer-events: none;
+}
+#emptyState[hidden] {
+  display: none;
+}
+#emptyState .row {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
 }
 #guide::before {
   content: "▶";

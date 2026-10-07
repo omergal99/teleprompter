@@ -485,8 +485,15 @@
       <div id="wrap">
         <div id="viewport">
           <div id="text" contenteditable="true" spellcheck="true"></div>
+          <div id="emptyState" hidden>
+            <p data-i18n="emptyHint"></p>
+            <div class="row">
+              <button class="btn primary" id="emptyNew"><span data-i18n="emptyNew"></span></button>
+              <button class="btn" id="emptySample"><span data-i18n="emptySample"></span></button>
+            </div>
+          </div>
         </div>
-        <div id="guide"></div>
+        <div id="guide" hidden></div>
         <div id="countdown"></div>
       </div>
       <div id="clock">00:00</div>
@@ -676,6 +683,14 @@
         ><label class="fld"
           ><span data-i18n="guide"></span
           ><input type="checkbox" class="sw" data-s="guide" /></label
+        ><label class="fld"
+          ><span data-i18n="guideY"></span
+          ><input
+            type="range"
+            min="5"
+            max="90"
+            step="1"
+            data-s="guideY" /><output></output></label
         ><label class="fld"
           ><span data-i18n="voice"></span
           ><input type="checkbox" class="sw" data-s="voice"

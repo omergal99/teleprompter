@@ -8,9 +8,20 @@ export function mountScriptList({
   getCurrent,
   open,
 }) {
+  let pendingDel = null;
   const render = () => {
     list.innerHTML = "";
-    for (const s of getAll()) {
+    const all = getAll();
+    if (!all.length) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.innerHTML = `<b>${t("noScripts")}</b><div class="row"><button data-a="new">${t("new")}</button></div>`;
+      li.querySelector("[data-a=new]").onclick = () =>
+        document.getElementById("newScript").click();
+      list.append(li);
+      return;
+    }
+    for (const s of all) {
       const { words, min } = St.stats(s.html),
         li = document.createElement("li");
       if (s.id === getCurrent()) li.className = "active";
@@ -25,12 +36,30 @@ export function mountScriptList({
           dlg.close();
         }
         if (a === "ren") {
-          const n = prompt(t("newTitle"), s.title);
-          if (n) {
-            s.title = n;
-            setAll(all);
-            if (s.id === getCurrent()) open(s.id);
-          }
+          // inline rename, no browser prompt()
+          const b = li.querySelector("b");
+          const inp = document.createElement("input");
+          inp.value = s.title || "";
+          inp.className = "rename-inp";
+          b.replaceWith(inp);
+          inp.focus();
+          inp.select();
+          let done = false;
+          const commit = (save) => {
+            if (done) return;
+            done = true;
+            if (save && inp.value.trim()) {
+              s.title = inp.value.trim();
+              setAll(all);
+              if (s.id === getCurrent()) open(s.id);
+            }
+            render();
+          };
+          inp.onkeydown = (ev) => {
+            if (ev.key === "Enter") commit(true);
+            if (ev.key === "Escape") commit(false);
+          };
+          inp.onblur = () => commit(true);
         }
         if (a === "dup") {
           all.push({
@@ -47,9 +76,33 @@ export function mountScriptList({
             JSON.stringify(s),
             "application/json",
           );
-        if (a === "del" && confirm(t("confirmDel"))) {
-          setAll(all.filter((x) => x.id !== s.id));
-          if (s.id === getCurrent()) open(getAll()[0]?.id);
+        // no browser confirm(): first click arms, second click deletes
+        if (a === "del") {
+          if (pendingDel !== s.id) {
+            pendingDel = s.id;
+            e.target.textContent = `${t("del")} ✓?`;
+            e.target.classList.add("danger");
+            setTimeout(() => {
+              if (pendingDel === s.id) {
+                pendingDel = null;
+                render();
+              }
+            }, 3000);
+            return;
+          }
+          pendingDel = null;
+          const next = all.filter((x) => x.id !== s.id);
+          setAll(next);
+          // always keep at least one script so open() never gets undefined
+          if (s.id === getCurrent()) {
+            if (next.length) open(next[0].id);
+            else {
+              const fresh = St.newScript(t("untitled"));
+              setAll([fresh]);
+              open(fresh.id);
+              dlg.close();
+            }
+          }
         }
         render();
       };

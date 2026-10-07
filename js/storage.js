@@ -76,14 +76,27 @@ export const samples = () => [
 export function loadScripts() {
   let a = j(L, null);
   if (!a || !a.length) {
-    a = samples();
-    saveScripts(a);
+    // never wipe user data: if backup exists restore it, else seed samples
+    const bak = j(L + ".bak", null);
+    if (bak && bak.length) {
+      a = bak;
+      try {
+        localStorage.setItem(L, JSON.stringify(a));
+      } catch {}
+    } else {
+      a = samples();
+      saveScripts(a);
+    }
   }
   return a;
 }
 export function saveScripts(a) {
   try {
     localStorage.setItem(L, JSON.stringify(a));
+    // keep a backup copy so a bad write / quota error never loses history
+    try {
+      localStorage.setItem(L + ".bak", JSON.stringify(a));
+    } catch {}
   } catch {
     alert("Storage full / האחסון מלא");
   }

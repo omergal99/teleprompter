@@ -184,6 +184,20 @@ dialog.dock::backdrop {
   background: var(--s1);
   border: 1px solid var(--line);
 }
+#scriptList .row button.danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+#scriptList .rename-inp {
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--accent);
+  background: var(--s1);
+  color: var(--tx);
+  padding: 0 10px;
+  width: 100%;
+}
 #recVideo {
   width: 100%;
   max-height: 56vh;

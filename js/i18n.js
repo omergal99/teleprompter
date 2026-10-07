@@ -127,6 +127,11 @@ Object.assign(D.he, {
   fontSmaller: "הקטן גופן",
   zoomIn: "הגדל תצוגה",
   zoomOut: "הקטן תצוגה",
+  guideY: "מיקום קו קריאה (%)",
+  noScripts: "אין עדיין סקריפטים",
+  emptyHint: "התצוגה ריקה — כתבו טקסט או התחילו חדש",
+  emptyNew: "כתוב טקסט חדש",
+  emptySample: "מלא דוגמה",
 });
 Object.assign(D.en, {
   more: "More",
@@ -143,4 +148,9 @@ Object.assign(D.en, {
   fontSmaller: "Decrease font size",
   zoomIn: "Zoom in (view only)",
   zoomOut: "Zoom out (view only)",
+  guideY: "Reading line position (%)",
+  noScripts: "No scripts yet",
+  emptyHint: "Viewport is empty — write something or start new",
+  emptyNew: "Write new text",
+  emptySample: "Insert sample",
 });

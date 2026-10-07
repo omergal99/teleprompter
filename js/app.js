@@ -26,6 +26,13 @@ const FONTS = {
 };
 const cam = new Camera($("cam"));
 
+// empty-state helper (declared early so updateLabels can call it safely)
+function renderEmptyState() {
+  const emptyEl = $("emptyState");
+  if (!emptyEl) return;
+  const txt = (text.innerText || text.textContent || "").trim();
+  emptyEl.hidden = txt.length > 0;
+}
 function applyStyle(s) {
   const th =
     s.theme === "light"
@@ -48,9 +55,12 @@ function applyStyle(s) {
     st.setProperty("--font", FONTS[s.font]);
     st.setProperty("--align", s.align);
     st.setProperty("--ov", cam.on ? s.overlay : 100);
+    st.setProperty("--guideY", (s.guideY ?? 40) + "%");
   }
   vp.style.transform = `scale(${s.mirrorH ? -1 : 1},${s.mirrorV ? -1 : 1})`;
-  body.classList.toggle("guide-on", s.guide);
+  body.classList.toggle("guide-on", !!s.guide);
+  const gd = $("guide");
+  if (gd) gd.hidden = !s.guide;
   applyLang(s.lang);
   syncTooltips(s.lang);
   editor?.syncAlign?.();
@@ -78,7 +88,20 @@ const editor = mountEditor({
     s.title = title;
     s.updated = Date.now();
     St.saveScripts(scripts);
+    renderEmptyState();
   },
+});
+// flush pending edits before unload so no history is lost on refresh/close
+addEventListener("beforeunload", () => {
+  try {
+    const s = scripts.find((x) => x.id === store.get().current);
+    if (s) {
+      s.html = text.innerHTML;
+      s.title = $("titleInput").value;
+      s.updated = Date.now();
+      St.saveScripts(scripts);
+    }
+  } catch {}
 });
 const saveAll = (a) => {
   scripts = a;
@@ -91,8 +114,13 @@ const list = mountScriptList({
   setAll: saveAll,
   getCurrent: () => store.get().current,
   open: (id) => {
-    const s = scripts.find((x) => x.id === id) || scripts[0];
-    if (!s) return;
+    let s = scripts.find((x) => x.id === id) || scripts[0];
+    // never leave the app without a script (fixes null crash on new/delete)
+    if (!s) {
+      s = St.newScript(t("untitled"));
+      scripts = [s];
+      St.saveScripts(scripts);
+    }
     store.set({ current: s.id });
     editor.load(s);
     setMode("edit");
@@ -114,12 +142,12 @@ function setMode(m) {
 }
 function updateLabels() {
   const run = prompter.running || !!cdTimer;
-  $("playIcon").firstChild.firstElementChild.setAttribute(
-    "href",
-    run ? "#i-pause" : "#i-play",
-  );
-  $("btnRec").classList.toggle("on", cam.recording);
-  $("recBadge").hidden = !cam.recording;
+  const pi = $("playIcon")?.firstChild?.firstElementChild;
+  if (pi) pi.setAttribute("href", run ? "#i-pause" : "#i-play");
+  $("btnRec")?.classList.toggle("on", cam.recording);
+  const rb = $("recBadge");
+  if (rb) rb.hidden = !cam.recording;
+  renderEmptyState();
 }
 function countdown(sec) {
   return new Promise((res) => {
@@ -170,9 +198,18 @@ async function play() {
 }
 const stop = () => {
   cancelCd();
+  // stop always returns to the top so next play starts from the beginning
   prompter.reset();
-  $("clock").textContent = "00:00";
+  const cd = $("countdown");
+  if (cd) cd.style.display = "none";
+  const ck = $("clock");
+  if (ck) ck.textContent = "00:00";
   setMode("edit");
+  // make sure edit view also shows the top
+  requestAnimationFrame(() => {
+    vp.scrollTop = 0;
+    prompter.pos = 0;
+  });
   updateLabels();
 };
 const toggleCam = async (on) => {
@@ -390,17 +427,64 @@ store.subscribe((s, p) => {
 });
 const first = store.get();
 applyStyle(first);
-const cur =
+let cur =
   scripts.find((x) => x.id === first.current) ||
   scripts.find(
     (x) => /[\u0590-\u05ff]/.test(x.title) === (first.lang === "he"),
   ) ||
   scripts[0];
+// fresh / corrupted storage guard: never boot with undefined script
+if (!cur) {
+  cur = St.newScript(t("untitled"));
+  scripts = [cur];
+  St.saveScripts(scripts);
+}
 store.set({ current: cur.id });
 editor.load(cur);
 setMode("edit");
 list.render();
-if ("serviceWorker" in navigator)
-  addEventListener("load", () =>
-    navigator.serviceWorker.register("sw.js").catch(() => {}),
+// empty-viewport wiring (renderEmptyState is declared near top)
+text.addEventListener("input", renderEmptyState);
+$("emptyNew")?.addEventListener("click", () => {
+  text.focus();
+  setMode("edit");
+});
+$("emptySample")?.addEventListener("click", () => {
+  const s = scripts.find((x) => x.id === store.get().current);
+  if (!s) return;
+  s.html = St.textToHtml(
+    store.get().lang === "he"
+      ? "כתבו כאן את הטקסט שלכם.\nלחצו הפעל כדי להתחיל."
+      : "Type your script here.\nPress Start to begin.",
   );
+  s.updated = Date.now();
+  St.saveScripts(scripts);
+  editor.load(s);
+  renderEmptyState();
+});
+if ("serviceWorker" in navigator)
+  addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("sw.js")
+      .then((reg) => {
+        // auto-activate new SW + reload once so refresh always shows new code
+        reg.addEventListener("updatefound", () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener("statechange", () => {
+            if (nw.state === "installed" && navigator.serviceWorker.controller)
+              location.reload();
+          });
+        });
+        setInterval(() => reg.update().catch(() => {}), 60 * 1000);
+      })
+      .catch(() => {});
+    // if a new SW already took over, reload to get fresh assets
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!reloaded) {
+        reloaded = true;
+        location.reload();
+      }
+    });
+  });
