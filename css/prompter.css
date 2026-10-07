@@ -27,7 +27,7 @@
   margin: 0 auto;
   padding: var(--pt) 0 60vh;
   outline: none;
-  font: var(--size)/var(--lh) var(--font);
+  font: calc(var(--size) * var(--zoom, 1)) / var(--lh) var(--font);
   letter-spacing: var(--ls);
   text-align: var(--align, center);
   word-break: break-word;

@@ -190,16 +190,8 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <text
-          x="1"
-          y="18"
-          font-size="16"
-          font-weight="700"
-          fill="currentColor"
-          stroke="none"
-        >
-          Aa
-        </text>
+        <path d="M5 4h14M12 4v16M9 20h6" />
+        <path d="M7 8.5h4M7 12h7" opacity=".55" />
       </symbol>
       <symbol
         id="i-bold"
@@ -329,6 +321,90 @@
         <circle cx="12" cy="19" r="1.6" fill="currentColor" />
       </symbol>
       <symbol
+        id="i-align-center"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 6h16M7 12h10M5 18h14" />
+      </symbol>
+      <symbol
+        id="i-select-all"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 4h16v16H4z" stroke-dasharray="3 2" />
+        <path d="M9 9h6v6H9z" fill="currentColor" stroke="none" opacity=".7" />
+      </symbol>
+      <symbol
+        id="i-font-plus"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M5 19V6.5A1.5 1.5 0 0 1 6.5 5H11M13 5h4.5A1.5 1.5 0 0 1 17 6.5V19M8 19h8" />
+        <path d="M18 14v6M15 17h6" />
+      </symbol>
+      <symbol
+        id="i-font-minus"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 19V6.5A1.5 1.5 0 0 1 5.5 5H10M12 5h3.5A1.5 1.5 0 0 1 17 6.5V19M6 19h9" />
+        <path d="M18 15h5" />
+      </symbol>
+      <symbol
+        id="i-bg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 5h16v11H4z" />
+        <path d="M4 17l5-5 3 3 3-3 5 5z" fill="currentColor" stroke="none" opacity=".65" />
+        <path d="M4 20h16" />
+      </symbol>
+      <symbol
+        id="i-zoom-in"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="6.5" />
+        <path d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5" />
+      </symbol>
+      <symbol
+        id="i-zoom-out"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="6.5" />
+        <path d="M16 16l4.5 4.5M8.5 11h5" />
+      </symbol>
+      <symbol
         id="i-mic"
         viewBox="0 0 24 24"
         fill="none"
@@ -343,29 +419,46 @@
       </symbol>
     </svg>
     <header id="topbar">
-      <button class="ic" id="btnScripts" aria-label="Scripts">
+      <button class="ic" id="btnScripts" aria-label="Scripts" title="Scripts">
         <svg class="i"><use href="#i-list" /></svg></button
       ><input id="titleInput" aria-label="Title" autocomplete="off" /><button
         class="ic"
         id="btnText"
         aria-label="Text"
+        title="Text settings"
       >
         <svg class="i"><use href="#i-type" /></svg></button
-      ><button class="ic" id="btnSettings" aria-label="Settings">
+      ><button class="ic" id="btnSettings" aria-label="Settings" title="Settings">
         <svg class="i"><use href="#i-sliders" /></svg></button
-      ><button class="ic" id="btnMenu" aria-label="More">
+      ><button class="ic" id="btnMenu" aria-label="More" title="More">
         <svg class="i"><use href="#i-dots" /></svg>
       </button>
     </header>
     <div id="editbar">
-      <button class="ic" data-cmd="bold" aria-label="Bold">
+      <button class="ic" data-cmd="bold" aria-label="Bold" title="Bold">
         <svg class="i"><use href="#i-bold" /></svg></button
-      ><button class="ic" data-cmd="underline" aria-label="Underline">
+      ><button class="ic" data-cmd="underline" aria-label="Underline" title="Underline">
         <svg class="i"><use href="#i-under" /></svg></button
-      ><label class="ic" aria-label="Color"
-        ><svg class="i"><use href="#i-color" /></svg
-        ><input type="color" id="hlColor" value="#ffd400" /></label
-      ><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed">
+      ><span class="sep"></span
+      ><button class="ic" id="btnAlign" aria-label="Alignment" title="Text alignment: center / start / end">
+        <svg class="i"><use href="#i-align-center" /></svg></button
+      ><span class="seg" role="group" aria-label="Align">
+        <button class="ic sm" data-align="start" aria-label="Align start" title="Align start">⇤</button
+        ><button class="ic sm" data-align="center" aria-label="Align center" title="Align center">≡</button
+        ><button class="ic sm" data-align="end" aria-label="Align end" title="Align end">⇥</button>
+      </span><span class="sep"></span
+      ><button class="ic" id="btnFontMinus" aria-label="Decrease font size" title="Decrease font size">
+        <svg class="i"><use href="#i-font-minus" /></svg></button
+      ><button class="ic" id="btnFontPlus" aria-label="Increase font size" title="Increase font size">
+        <svg class="i"><use href="#i-font-plus" /></svg></button
+      ><span class="sep"></span
+      ><button class="ic" id="btnFg" aria-label="Text color" title="Text color — applies to selected text">
+        <svg class="i"><use href="#i-color" /></svg><i class="dot" id="fgDot"></i></button
+      ><button class="ic" id="btnBg" aria-label="Highlight / background color" title="Highlight color — applies to selected text">
+        <svg class="i"><use href="#i-bg" /></svg><i class="dot" id="bgDot"></i></button
+      ><button class="ic" id="btnSelectAll" aria-label="Select all text" title="Select all text">
+        <svg class="i"><use href="#i-select-all" /></svg></button
+      ><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed" title="Paragraph speed">
         <svg class="i"><use href="#i-zap" /></svg>
       </button>
       <div id="speedPop" hidden>
@@ -376,6 +469,16 @@
           ><button data-v="2">2×</button>
         </div>
       </div>
+      <div id="colorPop" class="color-pop" hidden>
+        <div class="swatches" id="colorSwatches"></div>
+        <label class="custom-row"><span data-i18n="custom"></span><input type="color" id="hlColor" value="#ffd400" /></label>
+      </div>
+      <span class="grow"></span>
+      <span class="seg zoom" role="group" aria-label="Zoom">
+        <button class="ic sm" id="btnZoomOut" aria-label="Zoom out" title="Zoom out (view only)"><svg class="i"><use href="#i-zoom-out" /></svg></button
+        ><b id="zoomLabel">100%</b
+        ><button class="ic sm" id="btnZoomIn" aria-label="Zoom in" title="Zoom in (view only)"><svg class="i"><use href="#i-zoom-in" /></svg></button>
+      </span>
     </div>
     <main id="stage">
       <video id="cam" playsinline muted autoplay></video>
@@ -391,21 +494,21 @@
     </main>
     <footer id="controls">
       <div class="tr">
-        <button class="ic" id="btnStop" aria-label="Stop">
+        <button class="ic" id="btnStop" aria-label="Stop" title="Stop">
           <svg class="i"><use href="#i-stop" /></svg></button
-        ><button class="ic" id="btnEdit" aria-label="Edit">
+        ><button class="ic" id="btnEdit" aria-label="Edit" title="Edit">
           <svg class="i"><use href="#i-pencil" /></svg></button
-        ><button class="ic sk" id="btnBack" aria-label="-10s">
+        ><button class="ic sk" id="btnBack" aria-label="-10s" title="-10s">
           <svg class="i"><use href="#i-back" /></svg><b>10</b></button
-        ><button class="play" id="btnPlay" aria-label="Play">
+        ><button class="play" id="btnPlay" aria-label="Play" title="Play / Pause" data-play>
           <span id="playIcon"
             ><svg class="i"><use href="#i-play" /></svg
           ></span></button
-        ><button class="ic sk" id="btnFwd" aria-label="+10s">
+        ><button class="ic sk" id="btnFwd" aria-label="+10s" title="+10s">
           <b>10</b><svg class="i"><use href="#i-fwd" /></svg></button
-        ><button class="ic rec" id="btnRec" aria-label="Record">
+        ><button class="ic rec" id="btnRec" aria-label="Record" title="Record">
           <svg class="i"><use href="#i-rec" /></svg></button
-        ><button class="ic" id="btnHide" aria-label="Hide controls">
+        ><button class="ic" id="btnHide" aria-label="Hide controls" title="Hide controls">
           <svg class="i"><use href="#i-eyeoff" /></svg>
         </button>
       </div>
@@ -536,11 +639,12 @@
           ><input type="checkbox" class="sw" data-s="countdownOn" /></label
         ><label class="fld"
           ><span data-i18n="countdown"></span
-          ><select data-s="countdown">
+          ><span class="count-row"><select data-s="countdown" id="countdownSel">
+            <option value="0">0s</option>
             <option value="3">3s</option>
             <option value="5">5s</option>
             <option value="10">10s</option>
-          </select></label
+          </select><input type="number" id="countdownNum" min="0" max="60" step="1" data-s="countdown" data-num aria-label="seconds" title="Custom seconds" /></span></label
         ><label class="fld"
           ><span data-i18n="resume"></span
           ><input

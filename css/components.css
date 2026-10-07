@@ -9,12 +9,31 @@ dialog.sheet {
   border-radius: 20px 20px 0 0;
   overflow: hidden;
   flex-direction: column;
+  z-index: 100;
 }
 dialog.sheet[open] {
   display: flex;
 }
 dialog.sheet::backdrop {
   background: #0009;
+}
+dialog.dock {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--s1);
+  color: var(--tx);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px #000a;
+  z-index: 200;
+  width: min(420px, calc(100vw - 16px));
+  max-height: min(80dvh, 640px);
+  overflow: hidden;
+  flex-direction: column;
+}
+dialog.dock[open] {
+  display: flex;
 }
 dialog.dock::backdrop {
   background: transparent;
@@ -24,22 +43,23 @@ dialog.dock::backdrop {
     margin: auto;
     border-radius: 20px;
   }
-  dialog.dock {
-    margin: auto 16px 16px auto;
-  }
 }
-.sheet header {
+.sheet header,
+.dock header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px 10px 18px;
   border-bottom: 1px solid var(--line);
+  background: var(--s0);
 }
-.sheet h2 {
+.sheet h2,
+.dock h2 {
   margin: 0;
   font-size: 17px;
 }
-.sheet .body {
+.sheet .body,
+.dock .body {
   padding: 6px 16px 16px;
   overflow: auto;
   display: flex;

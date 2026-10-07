@@ -44,6 +44,7 @@ function applyStyle(s) {
     st.setProperty("--lh", s.lineHeight);
     st.setProperty("--ls", s.letterSpacing + "px");
     st.setProperty("--w", s.width + "%");
+    st.setProperty("--zoom", s.viewZoom ?? 1);
     st.setProperty("--font", FONTS[s.font]);
     st.setProperty("--align", s.align);
     st.setProperty("--ov", cam.on ? s.overlay : 100);
@@ -51,6 +52,9 @@ function applyStyle(s) {
   vp.style.transform = `scale(${s.mirrorH ? -1 : 1},${s.mirrorV ? -1 : 1})`;
   body.classList.toggle("guide-on", s.guide);
   applyLang(s.lang);
+  syncTooltips(s.lang);
+  editor?.syncAlign?.();
+  editor?.syncZoom?.();
   updateLabels();
 }
 
@@ -65,6 +69,8 @@ const prompter = new Prompter(vp, text, () => store.get(), {
 const editor = mountEditor({
   text,
   titleInput: $("titleInput"),
+  getStore: () => store.get(),
+  setStore: (p) => store.set(p),
   onChange: (html, title) => {
     const s = scripts.find((x) => x.id === store.get().current);
     if (!s) return;
@@ -197,7 +203,76 @@ $("btnEdit").onclick = () => {
   prompter.pause();
   setMode("edit");
 };
-$("btnText").onclick = () => $("dlgText").show();
+function syncTooltips(lang) {
+  const he = lang === "he";
+  const map = {
+    btnScripts: he ? "סקריפטים" : "Scripts",
+    btnText: he ? "הגדרות טקסט" : "Text settings",
+    btnSettings: he ? "הגדרות" : "Settings",
+    btnMenu: he ? "עוד" : "More",
+    btnFontPlus: he ? "הגדל גופן" : "Increase font size",
+    btnFontMinus: he ? "הקטן גופן" : "Decrease font size",
+    btnAlign: he ? "יישור טקסט" : "Text alignment",
+    btnFg: he ? "צבע טקסט לנבחר" : "Text color — selected text",
+    btnBg: he ? "צבע הדגשה לנבחר" : "Highlight color — selected text",
+    btnSelectAll: he ? "בחר את כל הטקסט" : "Select all text",
+    btnBlockSpeed: he ? "מהירות פסקה" : "Paragraph speed",
+    btnZoomIn: he ? "הגדל תצוגה (לא שומר)" : "Zoom in (view only)",
+    btnZoomOut: he ? "הקטן תצוגה (לא שומר)" : "Zoom out (view only)",
+    btnStop: he ? "עצור" : "Stop",
+    btnEdit: he ? "ערוך" : "Edit",
+    btnBack: he ? "-10 שניות" : "-10s",
+    btnFwd: he ? "+10 שניות" : "+10s",
+    btnRec: he ? "הקלט" : "Record",
+    btnHide: he ? "הסתר ממשק" : "Hide controls",
+    btnPlay: he ? "הפעל / השהה" : "Play / Pause",
+  };
+  for (const [id, tip] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.title = tip;
+      el.setAttribute("aria-label", tip);
+    }
+  }
+  document.querySelectorAll("[data-cmd]").forEach((b) => {
+    const c = b.dataset.cmd;
+    const tip = c === "bold" ? (he ? "מודגש" : "Bold") : he ? "קו תחתון" : "Underline";
+    b.title = tip;
+    b.setAttribute("aria-label", tip);
+  });
+  document.querySelectorAll("[data-align]").forEach((b) => {
+    const a = b.dataset.align;
+    const tip = he
+      ? `יישור ${a === "center" ? "מרכז" : a === "start" ? "התחלה" : "סוף"}`
+      : `Align ${a}`;
+    b.title = tip;
+    b.setAttribute("aria-label", tip);
+  });
+}
+
+// anchored non-modal text popup near #btnText
+const dlgText = $("dlgText");
+function positionDlgText() {
+  const btn = $("btnText");
+  if (!btn || !dlgText.open) return;
+  const r = btn.getBoundingClientRect();
+  const rtl = document.documentElement.dir === "rtl";
+  const w = Math.min(420, innerWidth - 16);
+  let left = rtl ? r.right - w : r.left;
+  left = Math.max(8, Math.min(innerWidth - w - 8, left));
+  dlgText.style.left = left + "px";
+  dlgText.style.top = r.bottom + 8 + "px";
+  dlgText.style.right = "auto";
+}
+function openDlgText() {
+  if (dlgText.open) {
+    dlgText.close();
+    return;
+  }
+  dlgText.show();
+  positionDlgText();
+}
+$("btnText").onclick = openDlgText;
 $("btnMenu").onclick = () => $("dlgMenu").showModal();
 const via = (id, f) =>
   ($(id).onclick = () => {
@@ -237,12 +312,21 @@ $("btnScripts").onclick = () => {
   $("dlgScripts").showModal();
 };
 $("btnSettings").onclick = () => $("dlgSettings").showModal();
-addEventListener("resize", () =>
+// click outside anchored dlgText closes it (it has transparent backdrop via non-modal show())
+document.addEventListener("pointerdown", (e) => {
+  if (
+    dlgText.open &&
+    !e.target.closest("#dlgText,#btnText,#colorPop,#speedPop")
+  )
+    dlgText.close();
+});
+addEventListener("resize", () => {
   document.documentElement.style.setProperty(
     "--pt",
     Math.round(vp.clientHeight * 0.4) + "px",
-  ),
-);
+  );
+  positionDlgText();
+});
 $("cam").ondblclick = async () => {
   if (cam.on) {
     store.set({

@@ -10,7 +10,7 @@ export const defaults = {
   bgColor: "#000000",
   fgColor: "#ffffff",
   direction: "up",
-  countdown: 3,
+  countdown: 0,
   countdownOn: true,
   resumeDelay: 2,
   overlay: 100,
@@ -21,6 +21,7 @@ export const defaults = {
   lang: "he",
   facing: "user",
   current: null,
+  viewZoom: 1,
 };
 export function createStore(init) {
   let s = { ...init };
