@@ -1,5 +1,6 @@
 const S = "tp.settings",
-  L = "tp.scripts";
+  L = "tp.scripts",
+  SV = 2; // settings schema version
 const j = (k, d) => {
   try {
     return JSON.parse(localStorage.getItem(k)) ?? d;
@@ -7,7 +8,17 @@ const j = (k, d) => {
     return d;
   }
 };
-export const loadSettings = () => j(S, {});
+export const loadSettings = () => {
+  const s = j(S, {});
+  // v2 migration: old defaults width 80 -> 100, countdown 0 -> 3.
+  // (stored values equal to the OLD defaults are the untouched ones)
+  if ((s.sv ?? 1) < SV) {
+    if (s.width === undefined || s.width === 80) s.width = 100;
+    if (s.countdown === undefined || s.countdown === 0) s.countdown = 3;
+    s.sv = SV;
+  }
+  return s;
+};
 export const saveSettings = (s) => {
   try {
     localStorage.setItem(S, JSON.stringify(s));

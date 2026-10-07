@@ -41,9 +41,15 @@ body.mode-present #text {
   -webkit-user-select: none;
 }
 body.mode-edit #text {
-  padding-top: 12px;
+  width: 100% !important; /* full-bleed editing: no side padding at all */
+  max-width: none;
+  margin: 0;
+  padding: 12px 0 40vh;
+  padding-inline: 0;
   caret-color: var(--accent);
-  padding-bottom: 40vh;
+}
+body.mode-edit #viewport {
+  padding-inline: 0;
 }
 #text [data-speed] {
   border-inline-start: 4px solid var(--accent);

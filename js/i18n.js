@@ -115,6 +115,9 @@ export function applyLang(l) {
 Object.assign(D.he, {
   more: "עוד",
   text: "טקסט",
+  fullscreen: "מסך מלא",
+  read: "מצב קריאה",
+  edit: "עריכה",
   language: "שפה",
   rotate: "סיבוב מסך / מסך מלא",
   countdownOn: "ספירה לאחור לפני התחלה",
@@ -136,6 +139,9 @@ Object.assign(D.he, {
 Object.assign(D.en, {
   more: "More",
   text: "Text",
+  fullscreen: "Fullscreen",
+  read: "Read mode",
+  edit: "Edit",
   language: "Language",
   rotate: "Rotate / fullscreen",
   countdownOn: "Countdown before start",

@@ -1,3 +1,5 @@
+import { announceChange } from "../ui/feedback.js";
+
 export function bindSettings(store) {
   document.querySelectorAll("[data-s]").forEach((el) => {
     const k = el.dataset.s,
@@ -10,6 +12,7 @@ export function bindSettings(store) {
     sync();
     store.subscribe((_, p) => k in p && sync());
     el.addEventListener("input", () => {
+      const oldV = store.get()[k];
       let v =
         el.type === "checkbox"
           ? el.checked
@@ -47,6 +50,7 @@ export function bindSettings(store) {
         }
       }
       store.set({ [k]: v });
+      announceChange(el, k, oldV, v);
     });
   });
   document

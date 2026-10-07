@@ -4,18 +4,18 @@
   --size: 48px;
   --lh: 1.6;
   --ls: 0px;
-  --w: 80%;
+  --w: 100%;
   --ov: 100;
   --zoom: 1;
   --guideY: 40%;
   --pt: 40vh;
   --font: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  --s0: #161b22;
-  --s1: #1f2530;
-  --s2: #2b3340;
-  --line: #3d4656;
-  --tx: #eef1f6;
-  --mut: #a7b0bf;
+  --s0: #20262f;
+  --s1: #2a323e;
+  --s2: #3a4453;
+  --line: #4f5b70;
+  --tx: #f0f3f8;
+  --mut: #b6bfcd;
   --accent: #6c8cff;
   --red: #ff3b30;
 }
@@ -198,6 +198,48 @@ body.hide-ui #controls,
 body.hide-ui #editbar {
   display: none;
 }
+/* compact text-option controls embedded in the editbar */
+#editbar .mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--s1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 3px 8px;
+  height: 34px;
+  font-size: 11px;
+  color: var(--mut);
+  flex: none;
+  position: relative;
+}
+#editbar .mini input[type="range"] {
+  width: 84px;
+}
+#editbar .mini output {
+  min-width: 26px;
+  text-align: end;
+  color: var(--tx);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+#editbar .mini select {
+  background: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  height: 24px;
+  font-size: 12px;
+  padding: 0 4px;
+  color: var(--tx);
+}
+#editbar .mini.swatch input[type="color"] {
+  width: 40px;
+  height: 22px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: none;
+  padding: 1px;
+}
 .tr {
   display: flex;
   align-items: center;
@@ -230,6 +272,21 @@ body.hide-ui #editbar {
   width: 26px;
   height: 26px;
 }
+#playIcon {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+#playIcon .i {
+  display: block;
+  /* optical centering: a right-pointing triangle reads left-heavy */
+  transform: translateX(1px);
+}
+.play.is-playing #playIcon .i {
+  transform: none;
+}
 .rec {
   color: var(--red);
 }
@@ -242,9 +299,7 @@ body.hide-ui #editbar {
     opacity: 0.55;
   }
 }
-body.mode-edit #btnEdit {
-  display: none;
-}
+/* btnEdit stays visible in BOTH modes: it toggles edit <-> read */
 .spd {
   display: flex;
   align-items: center;
@@ -287,21 +342,6 @@ input[type="range"]::-moz-range-thumb {
   background: var(--accent);
   border: 0;
 }
-#showUi {
-  position: fixed;
-  bottom: calc(14px + env(safe-area-inset-bottom));
-  inset-inline-end: 14px;
-  background: #000a;
-  border: 1px solid #fff3;
-  color: #fff;
-  z-index: 9;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-}
-body.hide-ui #showUi {
-  display: inline-flex;
-}
 #speedPop {
   position: absolute;
   top: 100%;
@@ -310,7 +350,7 @@ body.hide-ui #showUi {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 10px;
-  z-index: 60;
+  z-index: 250;
   box-shadow: 0 8px 24px #0008;
 }
 .color-pop {
@@ -322,7 +362,7 @@ body.hide-ui #showUi {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 10px;
-  z-index: 60;
+  z-index: 250;
   box-shadow: 0 8px 24px #0008;
 }
 .color-pop .swatches {

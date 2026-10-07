@@ -3,14 +3,14 @@ export const defaults = {
   fontSize: 56,
   lineHeight: 1.6,
   letterSpacing: 0,
-  width: 80,
+  width: 100,
   font: "sans",
   align: "center",
   theme: "dark",
   bgColor: "#000000",
   fgColor: "#ffffff",
   direction: "up",
-  countdown: 0,
+  countdown: 3,
   countdownOn: true,
   resumeDelay: 2,
   overlay: 100,
@@ -23,6 +23,7 @@ export const defaults = {
   facing: "user",
   current: null,
   viewZoom: 1,
+  sv: 2,
 };
 export function createStore(init) {
   let s = { ...init };

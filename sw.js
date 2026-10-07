@@ -1,4 +1,4 @@
-const V = "tp-v4",
+const V = "tp-v5",
   A = [
     "./",
     "index.html",
@@ -19,6 +19,13 @@ const V = "tp-v4",
     "js/components/editor.js",
     "js/components/toolbar.js",
     "js/components/scriptList.js",
+    "js/ui/transport.js",
+    "js/ui/dialogs.js",
+    "js/ui/hotkeys.js",
+    "js/ui/fullscreen.js",
+    "js/ui/record.js",
+    "js/ui/tooltips.js",
+    "js/ui/feedback.js",
   ];
 self.addEventListener("install", (e) =>
   e.waitUntil(

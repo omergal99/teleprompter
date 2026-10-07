@@ -1,32 +1,58 @@
 export class Prompter {
-  constructor(vp, text, get, { onTick, onEnd } = {}) {
+  constructor(vp, text, get, { onTick, onEnd, onChange } = {}) {
     Object.assign(this, {
       vp,
       text,
       get,
       onTick,
       onEnd,
+      onChange, // fires on every running-state change -> keeps play icon in sync
       running: false,
       pos: 0,
       elapsed: 0,
       userPaused: false,
       timer: 0,
+      holdTimer: 0,
+      hx: 0,
+      hy: 0,
     });
-    const stop = () => this.interrupt(),
-      rel = () => this.release();
-    vp.addEventListener("touchstart", stop, { passive: true });
-    vp.addEventListener("touchend", rel);
-    vp.addEventListener("touchcancel", rel);
-    vp.addEventListener("mousedown", stop);
-    window.addEventListener("mouseup", rel);
+    // Manual scrolling (wheel / touch / scrollbar / keyboard) only *moves* the
+    // text — it never stops playback. The loop adopts the new position and
+    // keeps going: UX goal = "moving the text while running doesn't halt it".
     vp.addEventListener(
-      "wheel",
+      "scroll",
       () => {
-        this.interrupt();
-        this.release();
+        if (this.running) this.pos = vp.scrollTop;
       },
       { passive: true },
     );
+    // Press-and-hold (finger/mouse stays still ~250ms) is the deliberate
+    // "hold to pause" gesture; releasing resumes after resumeDelay seconds.
+    const hold = (x, y) => {
+      this.hx = x;
+      this.hy = y;
+      clearTimeout(this.holdTimer);
+      if (!this.running) return;
+      this.holdTimer = setTimeout(() => {
+        if (this.running) this.interrupt();
+      }, 250);
+    };
+    const moved = (x, y) => {
+      // moving = scrolling/dragging, not holding -> never pause
+      if (Math.abs(x - this.hx) + Math.abs(y - this.hy) > 10)
+        clearTimeout(this.holdTimer);
+    };
+    vp.addEventListener("touchstart", (e) => hold(e.touches[0].clientX, e.touches[0].clientY), {
+      passive: true,
+    });
+    vp.addEventListener("touchmove", (e) => moved(e.touches[0].clientX, e.touches[0].clientY), {
+      passive: true,
+    });
+    vp.addEventListener("touchend", () => this.release());
+    vp.addEventListener("touchcancel", () => this.release());
+    vp.addEventListener("mousedown", (e) => hold(e.clientX, e.clientY));
+    vp.addEventListener("mousemove", (e) => moved(e.clientX, e.clientY));
+    window.addEventListener("mouseup", () => this.release());
   }
   pxPerSec(s) {
     return (s.speed * s.fontSize) / 60;
@@ -44,6 +70,8 @@ export class Prompter {
   }
   start() {
     if (this.running) return;
+    clearTimeout(this.timer);
+    clearTimeout(this.holdTimer);
     const s = this.get();
     if (s.direction === "down" && this.vp.scrollTop <= 0)
       this.vp.scrollTop = this.max();
@@ -51,6 +79,7 @@ export class Prompter {
     this.running = true;
     this.userPaused = false;
     this.last = performance.now();
+    this.onChange?.();
     requestAnimationFrame(this.loop);
   }
   loop = (ts) => {
@@ -71,6 +100,7 @@ export class Prompter {
     this.onTick?.(this.elapsed);
     if ((dir > 0 && this.pos >= this.max() - 1) || (dir < 0 && this.pos <= 0)) {
       this.running = false;
+      this.onChange?.();
       this.onEnd?.();
       return;
     }
@@ -80,6 +110,8 @@ export class Prompter {
     this.running = false;
     this.userPaused = false;
     clearTimeout(this.timer);
+    clearTimeout(this.holdTimer);
+    this.onChange?.();
   }
   toggle() {
     this.running ? this.pause() : this.start();
@@ -96,14 +128,19 @@ export class Prompter {
     this.vp.scrollTop = 0;
     this.pos = 0;
   }
+  // hold-to-pause: stop the scroll while the finger stays down
   interrupt() {
     clearTimeout(this.timer);
+    clearTimeout(this.holdTimer);
     if (this.running) {
       this.running = false;
       this.userPaused = true;
+      this.onChange?.();
     }
   }
+  // release resumes automatically after resumeDelay (unless explicitly paused)
   release() {
+    clearTimeout(this.holdTimer);
     if (!this.userPaused) return;
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {

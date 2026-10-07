@@ -26,7 +26,7 @@ dialog.dock {
   color: var(--tx);
   border-radius: 16px;
   box-shadow: 0 12px 32px #000a;
-  z-index: 200;
+  z-index: 300;
   width: min(420px, calc(100vw - 16px));
   max-height: min(80dvh, 640px);
   overflow: hidden;
@@ -148,6 +148,97 @@ dialog.dock::backdrop {
   flex-wrap: wrap;
   margin: 10px 0;
 }
+/* ---------- phone: settings opens as a non-modal bottom panel ----------
+   background stays visible & interactive so you can see every change live */
+dialog#dlgSettings.peek {
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 70dvh;
+  border-radius: 20px 20px 0 0;
+  border-inline: 0;
+  border-bottom: 0;
+  box-shadow: 0 -12px 40px #000a;
+  z-index: 120;
+}
+dialog#dlgSettings.peek::backdrop {
+  background: transparent; /* never hide what's happening behind */
+}
+/* ---------- "what changed" feedback ---------- */
+.fld,
+#editbar .mini {
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.fld.chg,
+#editbar .mini.chg {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.chg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  animation: chgIn 0.18s ease-out;
+}
+.chg-badge s {
+  color: var(--mut);
+  font-weight: 500;
+}
+.chg-badge b {
+  color: var(--tx);
+}
+@keyframes chgIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+#chgToast {
+  position: fixed;
+  top: calc(8px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translate(-50%, -140%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--s1);
+  border: 1px solid var(--accent);
+  color: var(--tx);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 400;
+  box-shadow: 0 8px 24px #000a;
+  opacity: 0;
+  transition:
+    transform 0.22s ease-out,
+    opacity 0.22s;
+  pointer-events: none;
+  max-width: 92vw;
+}
+#chgToast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+#chgToast s {
+  color: var(--mut);
+  font-weight: 500;
+}
+#chgToast b {
+  color: var(--accent);
+}
+#chgToast i {
+  color: var(--mut);
+  font-style: normal;
+}
+
 #scriptList {
   list-style: none;
   margin: 0;

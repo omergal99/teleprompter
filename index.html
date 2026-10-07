@@ -146,7 +146,7 @@
         />
       </symbol>
       <symbol
-        id="i-eye"
+        id="i-book"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -154,10 +154,18 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <path
-          d="M2.5 12C3.5 10 7 6 12 6s8.5 4 9.5 6c-1 2-4.5 6-9.5 6s-8.5-4-9.5-6z"
-        />
-        <circle cx="12" cy="12" r="3" />
+        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z" />
+      </symbol>
+      <symbol
+        id="i-full"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" />
       </symbol>
       <symbol
         id="i-pencil"
@@ -186,12 +194,11 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
+        stroke-width="2.2"
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <path d="M5 4h14M12 4v16M9 20h6" />
-        <path d="M7 8.5h4M7 12h7" opacity=".55" />
+        <path d="M5 19L12 5l7 14M7.5 14.5h9" />
       </symbol>
       <symbol
         id="i-bold"
@@ -461,6 +468,48 @@
       ><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed" title="Paragraph speed">
         <svg class="i"><use href="#i-zap" /></svg>
       </button>
+      <span class="sep"></span>
+      <label class="mini" title="Font size"
+        ><span data-i18n="fontSize"></span
+        ><input type="range" min="20" max="140" step="1" data-s="fontSize" /><output></output
+      ></label>
+      <label class="mini" title="Line height"
+        ><span data-i18n="lineHeight"></span
+        ><input type="range" min="1" max="2.6" step="0.1" data-s="lineHeight" /><output></output
+      ></label>
+      <label class="mini" title="Letter spacing"
+        ><span data-i18n="letterSpacing"></span
+        ><input type="range" min="0" max="12" step="0.5" data-s="letterSpacing" /><output></output
+      ></label>
+      <label class="mini" title="Text width"
+        ><span data-i18n="width"></span
+        ><input type="range" min="40" max="100" step="1" data-s="width" /><output></output
+      ></label>
+      <label class="mini" title="Font"
+        ><span data-i18n="font"></span
+        ><select data-s="font">
+          <option value="sans">Sans</option>
+          <option value="serif">Serif</option>
+          <option value="mono">Mono</option>
+          <option value="dyslexic">Dyslexic</option>
+        </select>
+      ></label>
+      <label class="mini" title="Theme"
+        ><span data-i18n="theme"></span
+        ><select data-s="theme">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="custom">Custom</option>
+        </select>
+      ></label>
+      <label class="mini swatch" title="Background color"
+        ><span data-i18n="bgColor"></span
+        ><input type="color" data-s="bgColor"
+      ></label>
+      <label class="mini swatch" title="Text color"
+        ><span data-i18n="fgColor"></span
+        ><input type="color" data-s="fgColor"
+      ></label>
       <div id="speedPop" hidden>
         <small data-i18n="blockSpeed"></small>
         <div>
@@ -530,9 +579,6 @@
           aria-label="Speed" /><output></output
       ></label>
     </footer>
-    <button class="ic" id="showUi" hidden aria-label="Show controls">
-      <svg class="i"><use href="#i-eye" /></svg>
-    </button>
     <dialog id="dlgMenu" class="sheet menu">
       <header>
         <h2 data-i18n="more"></h2>
@@ -550,6 +596,9 @@
         ><button class="item" id="mRot">
           <svg class="i"><use href="#i-rotate" /></svg
           ><span data-i18n="rotate"></span></button
+        ><button class="item" id="mFs">
+          <svg class="i"><use href="#i-full" /></svg
+          ><span data-i18n="fullscreen"></span></button
         ><button class="item" id="mSet">
           <svg class="i"><use href="#i-sliders" /></svg
           ><span data-i18n="settings"></span>
