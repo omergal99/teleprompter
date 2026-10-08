@@ -23,7 +23,7 @@ export const defaults = {
   facing: "user",
   current: null,
   viewZoom: 1,
-  sv: 2,
+  sv: 3,
 };
 export function createStore(init) {
   let s = { ...init };
