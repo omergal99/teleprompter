@@ -70,7 +70,7 @@ export function initDialogs({ $, store, cam, pip, list, applyStyle, onCamera }) 
   document.addEventListener("pointerdown", (e) => {
     if (
       dlgText.open &&
-      !e.target.closest("#dlgText,#btnText,#colorPop,#speedPop")
+      !e.target.closest("#dlgText,#btnText,#colorPop,#speedPop,#formatPop")
     )
       dlgText.close();
     if (
