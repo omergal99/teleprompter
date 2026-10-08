@@ -58,6 +58,29 @@ dialog.dock::backdrop {
   margin: 0;
   font-size: 17px;
 }
+/* compact text-settings menu (scoped to #dlgText only) */
+#dlgText header {
+  padding: 6px 8px 6px 12px;
+  min-height: 0;
+}
+#dlgText h2 {
+  font-size: 15px;
+}
+#dlgText .body {
+  padding: 2px 12px 10px;
+}
+#dlgText .fld {
+  min-height: 40px;
+  gap: 10px;
+  font-size: 14px;
+}
+#dlgText .fld input[type="range"] {
+  width: 52%;
+}
+#dlgText .ic[data-close] {
+  width: 36px;
+  height: 36px;
+}
 .sheet .body,
 .dock .body {
   padding: 6px 16px 16px;

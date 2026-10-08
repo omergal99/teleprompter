@@ -17,9 +17,9 @@ export function syncTooltips(lang) {
     btnZoomOut: he ? "הקטן תצוגה (לא שומר)" : "Zoom out (view only)",
     btnStop: he ? "עצור" : "Stop",
     btnEdit: he ? "ערוך / קריאה" : "Edit / Read",
-    btnBack: he ? "-10 שניות" : "-10s",
-    btnFwd: he ? "+10 שניות" : "+10s",
-    btnRec: he ? "הקלט" : "Record",
+    btnBack: he ? "10 שניות אחורה" : "Back 10 seconds",
+    btnFwd: he ? "10 שניות קדימה" : "Forward 10 seconds",
+    mRec: he ? "הקלט" : "Record",
     btnHide: he ? "הסתר ממשק" : "Hide controls",
     btnPlay: he ? "הפעל / השהה" : "Play / Pause",
   };

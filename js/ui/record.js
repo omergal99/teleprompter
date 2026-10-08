@@ -22,7 +22,8 @@ export function createMedia({ $, store, cam, prompter, applyStyle, transport }) 
     }
   };
 
-  $("btnRec").onclick = async () => {
+  // record toggle shared by footer + More-menu entries
+  const toggleRec = async () => {
     if (cam.recording) {
       const { blob, ext } = await cam.stopRec();
       transport.updateLabels();
@@ -43,7 +44,8 @@ export function createMedia({ $, store, cam, prompter, applyStyle, transport }) 
       alert(t("noCam"));
     }
   };
+  if ($("mRec")) $("mRec").onclick = toggleRec;
   $("dlgRec").addEventListener("close", () => $("recVideo").pause());
 
-  return { toggleCam };
+  return { toggleCam, toggleRec };
 }

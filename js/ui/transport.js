@@ -47,7 +47,7 @@ export function createTransport({
       eb.setAttribute("aria-label", label);
       eb.querySelector("use")?.setAttribute("href", editing ? "#i-book" : "#i-pencil");
     }
-    $("btnRec")?.classList.toggle("on", cam.recording);
+    $("mRec")?.classList.toggle("recording", cam.recording);
     const rb = $("recBadge");
     if (rb) rb.hidden = !cam.recording;
     renderEmptyState();
