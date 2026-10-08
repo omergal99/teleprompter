@@ -93,7 +93,10 @@ export function mountEditor({ text, titleInput, onChange, getStore, setStore }) 
       return;
     }
     colorMode = mode;
-    document.getElementById("speedPop").hidden = true;
+    const sp = document.getElementById("speedPop");
+    if (sp) sp.hidden = true;
+    const fp = document.getElementById("formatPop");
+    if (fp) fp.hidden = true;
     colorPop.hidden = false;
     if (hl) hl.value = mode === "hilite" ? lastBg : lastFg;
   };
@@ -101,12 +104,28 @@ export function mountEditor({ text, titleInput, onChange, getStore, setStore }) 
   if (btnBg) btnBg.onclick = () => toggleColorPop("hilite");
   if (hl) hl.oninput = () => applyColor(hl.value);
 
+  // ---- single "Text formatting" popover on the edit bar ----
+  const fmtPop = document.getElementById("formatPop");
+  const btnFmt = document.getElementById("btnFormat");
+  if (btnFmt && fmtPop) {
+    btnFmt.onmousedown = (e) => e.preventDefault();
+    btnFmt.onclick = () => {
+      if (colorPop) colorPop.hidden = true;
+      const sp = document.getElementById("speedPop");
+      if (sp) sp.hidden = true;
+      fmtPop.hidden = !fmtPop.hidden;
+    };
+  }
+
   // quick text tools moved into editbar (kept in dlgText for full settings too)
+  const ALIGN_ICON = { center: "#i-align-center", start: "#i-align-start", end: "#i-align-end" };
   const syncAlignSeg = () => {
     const cur = getStore?.().align || "center";
     document.querySelectorAll("[data-align]").forEach((b) =>
       b.classList.toggle("on", b.dataset.align === cur),
     );
+    const ba = document.getElementById("btnAlign");
+    ba?.querySelector("use")?.setAttribute("href", ALIGN_ICON[cur] || ALIGN_ICON.center);
   };
   syncAlignSeg();
   document.querySelectorAll("[data-align]").forEach((b) => {
@@ -180,10 +199,11 @@ export function mountEditor({ text, titleInput, onChange, getStore, setStore }) 
     fire();
   };
   document.addEventListener("pointerdown", (e) => {
-    if (!e.target.closest("#speedPop,#btnBlockSpeed")) pop.hidden = true;
+    if (!e.target.closest("#speedPop,#btnBlockSpeed") && pop) pop.hidden = true;
     if (!e.target.closest("#colorPop,#btnFg,#btnBg")) {
       if (colorPop) colorPop.hidden = true;
     }
+    if (!e.target.closest("#formatPop,#btnFormat") && fmtPop) fmtPop.hidden = true;
   });
   return {
     load(s) {

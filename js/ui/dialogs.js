@@ -58,6 +58,8 @@ export function initDialogs({ $, store, cam, pip, list, applyStyle, onCamera }) 
   via("mFs", () => toggleFullscreen());
   via("mRot", () => rotateScreen());
   via("mPip", () => pip.toggle());
+  // footer transport-bar fullscreen toggle (same action as menu)
+  if ($("btnFs")) $("btnFs").onclick = () => toggleFullscreen();
   $("btnSettings").onclick = openSettings;
   $("btnScripts").onclick = () => {
     list.render();

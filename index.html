@@ -339,6 +339,39 @@
         <path d="M4 6h16M7 12h10M5 18h14" />
       </symbol>
       <symbol
+        id="i-align-start"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 6h16M4 12h10M4 18h14" />
+      </symbol>
+      <symbol
+        id="i-align-end"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 6h16M10 12h10M6 18h14" />
+      </symbol>
+      <symbol
+        id="i-format"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M5 6V4h14v2M12 4v16M9 20h6" />
+      </symbol>
+      <symbol
         id="i-select-all"
         viewBox="0 0 24 24"
         fill="none"
@@ -449,66 +482,46 @@
       ><span class="sep"></span
       ><button class="ic" id="btnAlign" aria-label="Alignment" title="Text alignment: center / start / end">
         <svg class="i"><use href="#i-align-center" /></svg></button
-      ><span class="seg" role="group" aria-label="Align">
-        <button class="ic sm" data-align="start" aria-label="Align start" title="Align start">⇤</button
-        ><button class="ic sm" data-align="center" aria-label="Align center" title="Align center">≡</button
-        ><button class="ic sm" data-align="end" aria-label="Align end" title="Align end">⇥</button>
-      </span><span class="sep"></span
-      ><button class="ic" id="btnFontMinus" aria-label="Decrease font size" title="Decrease font size">
-        <svg class="i"><use href="#i-font-minus" /></svg></button
-      ><button class="ic" id="btnFontPlus" aria-label="Increase font size" title="Increase font size">
-        <svg class="i"><use href="#i-font-plus" /></svg></button
+      ><button class="ic" id="btnFormat" aria-label="Text formatting" title="Text formatting: size, spacing, width">
+        <svg class="i"><use href="#i-format" /></svg></button
       ><span class="sep"></span
-      ><button class="ic" id="btnFg" aria-label="Text color" title="Text color — applies to selected text">
-        <svg class="i"><use href="#i-color" /></svg><i class="dot" id="fgDot"></i></button
-      ><button class="ic" id="btnBg" aria-label="Highlight / background color" title="Highlight color — applies to selected text">
-        <svg class="i"><use href="#i-bg" /></svg><i class="dot" id="bgDot"></i></button
       ><button class="ic" id="btnSelectAll" aria-label="Select all text" title="Select all text">
         <svg class="i"><use href="#i-select-all" /></svg></button
       ><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed" title="Paragraph speed">
         <svg class="i"><use href="#i-zap" /></svg>
       </button>
       <span class="sep"></span>
-      <label class="mini" title="Font size"
-        ><span data-i18n="fontSize"></span
-        ><input type="range" min="20" max="140" step="1" data-s="fontSize" /><output></output
-      ></label>
-      <label class="mini" title="Line height"
-        ><span data-i18n="lineHeight"></span
-        ><input type="range" min="1" max="2.6" step="0.1" data-s="lineHeight" /><output></output
-      ></label>
-      <label class="mini" title="Letter spacing"
-        ><span data-i18n="letterSpacing"></span
-        ><input type="range" min="0" max="12" step="0.5" data-s="letterSpacing" /><output></output
-      ></label>
-      <label class="mini" title="Text width"
-        ><span data-i18n="width"></span
-        ><input type="range" min="40" max="100" step="1" data-s="width" /><output></output
-      ></label>
-      <label class="mini" title="Font"
+      <div id="formatPop" class="format-pop" hidden>
+        <label class="mini" title="Font size"
+          ><span data-i18n="fontSize"></span
+          ><input type="range" min="20" max="140" step="1" data-s="fontSize" /><output></output
+        ></label>
+        <label class="mini" title="Line height"
+          ><span data-i18n="lineHeight"></span
+          ><input type="range" min="1" max="2.6" step="0.1" data-s="lineHeight" /><output></output
+        ></label>
+        <label class="mini" title="Letter spacing"
+          ><span data-i18n="letterSpacing"></span
+          ><input type="range" min="0" max="12" step="0.5" data-s="letterSpacing" /><output></output
+        ></label>
+        <label class="mini" title="Text width"
+          ><span data-i18n="width"></span
+          ><input type="range" min="40" max="100" step="1" data-s="width" /><output></output
+        ></label>
+      </div>
+      <label class="mini font-fixed" title="Font"
         ><span data-i18n="font"></span
         ><select data-s="font">
           <option value="sans">Sans</option>
+          <option value="arial">Arial</option>
+          <option value="verdana">Verdana</option>
+          <option value="tahoma">Tahoma</option>
+          <option value="times">Times</option>
           <option value="serif">Serif</option>
           <option value="mono">Mono</option>
+          <option value="courier">Courier</option>
           <option value="dyslexic">Dyslexic</option>
         </select>
-      ></label>
-      <label class="mini" title="Theme"
-        ><span data-i18n="theme"></span
-        ><select data-s="theme">
-          <option value="dark">Dark</option>
-          <option value="light">Light</option>
-          <option value="custom">Custom</option>
-        </select>
-      ></label>
-      <label class="mini swatch" title="Background color"
-        ><span data-i18n="bgColor"></span
-        ><input type="color" data-s="bgColor"
-      ></label>
-      <label class="mini swatch" title="Text color"
-        ><span data-i18n="fgColor"></span
-        ><input type="color" data-s="fgColor"
       ></label>
       <div id="speedPop" hidden>
         <small data-i18n="blockSpeed"></small>
@@ -517,10 +530,6 @@
           ><button data-v="1">1×</button><button data-v="1.5">1.5×</button
           ><button data-v="2">2×</button>
         </div>
-      </div>
-      <div id="colorPop" class="color-pop" hidden>
-        <div class="swatches" id="colorSwatches"></div>
-        <label class="custom-row"><span data-i18n="custom"></span><input type="color" id="hlColor" value="#ffd400" /></label>
       </div>
       <span class="grow"></span>
       <span class="seg zoom" role="group" aria-label="Zoom">
@@ -564,6 +573,8 @@
           <b>10</b><svg class="i"><use href="#i-fwd" /></svg></button
         ><button class="ic rec" id="btnRec" aria-label="Record" title="Record">
           <svg class="i"><use href="#i-rec" /></svg></button
+        ><button class="ic" id="btnFs" aria-label="Fullscreen" title="Fullscreen">
+          <svg class="i"><use href="#i-full" /></svg></button
         ><button class="ic" id="btnHide" aria-label="Hide controls" title="Hide controls">
           <svg class="i"><use href="#i-eyeoff" /></svg>
         </button>
@@ -649,8 +660,13 @@
           ><span data-i18n="font"></span
           ><select data-s="font">
             <option value="sans">Sans-serif</option>
+            <option value="arial">Arial</option>
+            <option value="verdana">Verdana</option>
+            <option value="tahoma">Tahoma</option>
+            <option value="times">Times New Roman</option>
             <option value="serif">Serif</option>
             <option value="mono">Monospace</option>
+            <option value="courier">Courier New</option>
             <option value="dyslexic">Dyslexic-friendly</option>
           </select></label
         ><label class="fld"
@@ -668,6 +684,16 @@
             <option value="custom">Custom</option>
           </select></label
         ><label class="fld"
+          ><span data-i18n="selection"></span
+          ><span class="sel-colors"><button class="ic" id="btnFg" aria-label="Text color" title="Text color — applies to selected text">
+            <svg class="i"><use href="#i-color" /></svg><i class="dot" id="fgDot"></i></button
+          ><button class="ic" id="btnBg" aria-label="Highlight color" title="Highlight color — applies to selected text">
+            <svg class="i"><use href="#i-bg" /></svg><i class="dot" id="bgDot"></i></button></span></label
+        ><div id="colorPop" class="color-pop" hidden>
+          <div class="swatches" id="colorSwatches"></div>
+          <label class="custom-row"><span data-i18n="custom"></span><input type="color" id="hlColor" value="#ffd400" /></label>
+        </div>
+        <label class="fld"
           ><span data-i18n="bgColor"></span
           ><input type="color" data-s="bgColor" /></label
         ><label class="fld"

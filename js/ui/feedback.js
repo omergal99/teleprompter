@@ -1,6 +1,6 @@
-// "What actually changed" feedback: when a setting is edited, the row flashes
-// and shows  old → new  inline, so it's obvious even when a phone dialog is
-// only partially covering the screen.
+// "What actually changed" feedback: toast-only (no inline CH badge).
+// Every setting change confirms old → new in the top toast so the
+// edit bar and dialogs stay compact.
 let toastEl = null,
   toastTimer = 0;
 
@@ -17,7 +17,11 @@ const fmt = (k, v) => {
   if (typeof v === "boolean") return v ? "✓" : "✗";
   if (k === "theme") return { dark: "Dark", light: "Light", custom: "Custom" }[v] ?? v;
   if (k === "font")
-    return { sans: "Sans", serif: "Serif", mono: "Mono", dyslexic: "Dyslexic" }[v] ?? v;
+    return {
+      sans: "Sans", arial: "Arial", verdana: "Verdana", tahoma: "Tahoma",
+      times: "Times", serif: "Serif", mono: "Mono",
+      courier: "Courier", dyslexic: "Dyslexic",
+    }[v] ?? v;
   if (k === "align")
     return { center: "Center", start: "Start", end: "End" }[v] ?? v;
   if (k === "direction") return v === "down" ? "⬇" : "⬆";
@@ -29,7 +33,9 @@ const fmt = (k, v) => {
 const LABEL = {}; // data-i18n key -> localized label, filled lazily
 function labelFor(el, key) {
   if (!LABEL[key]) {
-    const span = document.querySelector(`.fld > [data-i18n="${key}"]`);
+    const span =
+      document.querySelector(`.fld > [data-i18n="${key}"]`) ||
+      document.querySelector(`[data-i18n="${key}"]`);
     LABEL[key] = span?.textContent || key;
   }
   return LABEL[key];
@@ -37,32 +43,8 @@ function labelFor(el, key) {
 
 export function announceChange(el, key, oldV, newV) {
   if (String(oldV) === String(newV)) return;
-  const row = el.closest(".fld") || el.closest("label") || el.parentElement;
-  // inline badge right on the changed row
-  if (row) {
-    row.classList.remove("chg");
-    void row.offsetWidth; // restart animation
-    row.classList.add("chg");
-    let badge = row.querySelector(".chg-badge");
-    if (!badge) {
-      badge = document.createElement("span");
-      badge.className = "chg-badge";
-      row.appendChild(badge);
-    }
-    badge.innerHTML = "";
-    const a = document.createElement("s");
-    a.textContent = fmt(key, oldV);
-    const arrow = document.createElement("i");
-    arrow.textContent = " → ";
-    const b = document.createElement("b");
-    b.textContent = fmt(key, newV);
-    badge.append(a, arrow, b);
-    clearTimeout(row._chgT);
-    row._chgT = setTimeout(() => {
-      row.classList.remove("chg");
-      badge.remove();
-    }, 4000);
-  }
+  // Toast-only feedback (no inline CH badge anywhere): keeps edit bar
+  // and dialogs compact while still confirming old → new up top.
   // top toast summarises the change (visible even over the sheet header)
   const el2 = ensureToast();
   el2.innerHTML = "";

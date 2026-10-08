@@ -23,8 +23,13 @@ const text = $("text"),
   body = document.body;
 const FONTS = {
   sans: 'system-ui,-apple-system,"Segoe UI",Arial,sans-serif',
+  arial: 'Arial,Helvetica,sans-serif',
+  verdana: 'Verdana,Geneva,sans-serif',
+  tahoma: 'Tahoma,Geneva,sans-serif',
+  times: '"Times New Roman",Times,Georgia,serif',
   serif: 'Georgia,"Times New Roman",serif',
   mono: "ui-monospace,Menlo,Consolas,monospace",
+  courier: '"Courier New",Courier,ui-monospace,monospace',
   dyslexic: '"OpenDyslexic","Comic Sans MS","Comic Neue",Verdana,sans-serif',
 };
 const cam = new Camera($("cam"));

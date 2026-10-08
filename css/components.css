@@ -166,38 +166,10 @@ dialog#dlgSettings.peek {
 dialog#dlgSettings.peek::backdrop {
   background: transparent; /* never hide what's happening behind */
 }
-/* ---------- "what changed" feedback ---------- */
+/* ---------- "what changed" feedback: toast only (no inline badge) ---------- */
 .fld,
 #editbar .mini {
   transition: background 0.3s, box-shadow 0.3s;
-}
-.fld.chg,
-#editbar .mini.chg {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
-  box-shadow: inset 0 0 0 1px var(--accent);
-}
-.chg-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  white-space: nowrap;
-  animation: chgIn 0.18s ease-out;
-}
-.chg-badge s {
-  color: var(--mut);
-  font-weight: 500;
-}
-.chg-badge b {
-  color: var(--tx);
-}
-@keyframes chgIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
 }
 #chgToast {
   position: fixed;

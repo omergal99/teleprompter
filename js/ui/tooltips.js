@@ -4,6 +4,9 @@ export function syncTooltips(lang) {
   const map = {
     btnScripts: he ? "סקריפטים" : "Scripts",
     btnText: he ? "הגדרות טקסט" : "Text settings",
+    btnFormat: he ? "עיצוב טקסט: גודל, מרווחים, רוחב" : "Text formatting: size, spacing, width",
+    btnAlign: he ? "יישור טקסט" : "Text alignment",
+    btnFs: he ? "מסך מלא" : "Fullscreen",
     btnSettings: he ? "הגדרות" : "Settings",
     btnMenu: he ? "עוד" : "More",
     btnFg: he ? "צבע טקסט — על הנבחר" : "Text color — selected text",

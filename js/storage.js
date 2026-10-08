@@ -1,6 +1,6 @@
 const S = "tp.settings",
   L = "tp.scripts",
-  SV = 2; // settings schema version
+  SV = 3; // settings schema version
 const j = (k, d) => {
   try {
     return JSON.parse(localStorage.getItem(k)) ?? d;
@@ -10,11 +10,22 @@ const j = (k, d) => {
 };
 export const loadSettings = () => {
   const s = j(S, {});
-  // v2 migration: old defaults width 80 -> 100, countdown 0 -> 3.
-  // (stored values equal to the OLD defaults are the untouched ones)
-  if ((s.sv ?? 1) < SV) {
+  // v3: countdown OFF by default. Fresh installs have no sv; legacy (sv<3)
+  // that never touched countdown explicitly fall back to OFF too.
+  if ((s.sv ?? 0) < SV) {
     if (s.width === undefined || s.width === 80) s.width = 100;
-    if (s.countdown === undefined || s.countdown === 0) s.countdown = 3;
+    if (s.sv === undefined && s.countdown === undefined) {
+      s.countdown = 0;
+      s.countdownOn = false;
+    }
+    if (s.sv === 2 && (s.countdown === 3 || s.countdownOn === true)) {
+      // v2 auto-migrated 0->3 / may carry countdownOn=true from old defaults;
+      // treat untouched installs as OFF unless user explicitly enabled.
+      if (!("countdownOn" in s) || s.countdown === 3) {
+        s.countdown = 0;
+        s.countdownOn = false;
+      }
+    }
     s.sv = SV;
   }
   return s;

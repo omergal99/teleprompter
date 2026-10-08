@@ -353,6 +353,44 @@ input[type="range"]::-moz-range-thumb {
   z-index: 250;
   box-shadow: 0 8px 24px #0008;
 }
+/* single "Text formatting" popover on the edit bar */
+#formatPop.format-pop {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 8px;
+  z-index: 250;
+  background: var(--s1);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px #0008;
+  padding: 6px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: min(300px, 86vw);
+}
+#formatPop[hidden] {
+  display: none;
+}
+#formatPop .mini {
+  min-height: 44px;
+}
+/* fixed-width font picker: changing typeface never shifts neighbours */
+#editbar .mini.font-fixed select {
+  width: 118px;
+  max-width: 118px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sel-colors {
+  display: inline-flex;
+  gap: 2px;
+}
+.sel-colors .ic {
+  width: 40px;
+  height: 40px;
+}
 .color-pop {
   position: absolute;
   top: 100%;
@@ -386,6 +424,14 @@ input[type="range"]::-moz-range-thumb {
   gap: 10px;
   margin-top: 10px;
   color: var(--tx);
+}
+/* selection-color popover when hosted inside the Text Settings dialog */
+#dlgText .color-pop {
+  position: static;
+  width: auto;
+  box-shadow: none;
+  margin: 0 0 4px;
+  padding: 10px 12px;
 }
 .color-pop input[type="color"] {
   width: 64px;

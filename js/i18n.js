@@ -115,6 +115,8 @@ export function applyLang(l) {
 Object.assign(D.he, {
   more: "עוד",
   text: "טקסט",
+  textFmt: "עיצוב טקסט",
+  selection: "צבע לבחירה",
   fullscreen: "מסך מלא",
   read: "מצב קריאה",
   edit: "עריכה",
@@ -139,6 +141,8 @@ Object.assign(D.he, {
 Object.assign(D.en, {
   more: "More",
   text: "Text",
+  textFmt: "Text formatting",
+  selection: "Selection color",
   fullscreen: "Fullscreen",
   read: "Read mode",
   edit: "Edit",
