@@ -15,7 +15,7 @@ function ensureToast() {
 
 const fmt = (k, v) => {
   if (typeof v === "boolean") return v ? "✓" : "✗";
-  if (k === "theme") return { dark: "Dark", light: "Light", custom: "Custom" }[v] ?? v;
+  if (k === "theme") return { dark: "Dark", light: "Light" }[v] ?? v;
   if (k === "font")
     return {
       sans: "Sans", arial: "Arial", verdana: "Verdana", tahoma: "Tahoma",

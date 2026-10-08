@@ -383,14 +383,7 @@ input[type="range"]::-moz-range-thumb {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.sel-colors {
-  display: inline-flex;
-  gap: 2px;
-}
-.sel-colors .ic {
-  width: 40px;
-  height: 40px;
-}
+/* selection-color popover anchored under the edit bar */
 .color-pop {
   position: absolute;
   top: 100%;
@@ -424,14 +417,6 @@ input[type="range"]::-moz-range-thumb {
   gap: 10px;
   margin-top: 10px;
   color: var(--tx);
-}
-/* selection-color popover when hosted inside the Text Settings dialog */
-#dlgText .color-pop {
-  position: static;
-  width: auto;
-  box-shadow: none;
-  margin: 0 0 4px;
-  padding: 10px 12px;
 }
 .color-pop input[type="color"] {
   width: 64px;

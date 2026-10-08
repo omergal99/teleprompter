@@ -42,12 +42,7 @@ function renderEmptyState() {
   emptyEl.hidden = txt.length > 0;
 }
 function applyStyle(s) {
-  const th =
-    s.theme === "light"
-      ? ["#fff", "#000"]
-      : s.theme === "custom"
-        ? [s.bgColor, s.fgColor]
-        : ["#000", "#fff"];
+  const th = s.theme === "light" ? ["#fff", "#000"] : ["#000", "#fff"];
   for (const root of [
     document.documentElement,
     pipWin?.document.documentElement,

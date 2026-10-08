@@ -7,8 +7,6 @@ export const defaults = {
   font: "sans",
   align: "center",
   theme: "dark",
-  bgColor: "#000000",
-  fgColor: "#ffffff",
   direction: "up",
   countdown: 0,
   countdownOn: false,

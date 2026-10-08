@@ -485,6 +485,10 @@
       ><button class="ic" id="btnFormat" aria-label="Text formatting" title="Text formatting: size, spacing, width">
         <svg class="i"><use href="#i-format" /></svg></button
       ><span class="sep"></span
+      ><button class="ic" id="btnFg" aria-label="Text color" title="Text color — applies to selected text">
+        <svg class="i"><use href="#i-color" /></svg><i class="dot" id="fgDot"></i></button
+      ><button class="ic" id="btnBg" aria-label="Highlight / background color" title="Highlight color — applies to selected text">
+        <svg class="i"><use href="#i-bg" /></svg><i class="dot" id="bgDot"></i></button
       ><button class="ic" id="btnSelectAll" aria-label="Select all text" title="Select all text">
         <svg class="i"><use href="#i-select-all" /></svg></button
       ><button class="ic" id="btnBlockSpeed" aria-label="Paragraph speed" title="Paragraph speed">
@@ -521,8 +525,11 @@
           <option value="mono">Mono</option>
           <option value="courier">Courier</option>
           <option value="dyslexic">Dyslexic</option>
-        </select>
-      ></label>
+        </select></label>
+      <div id="colorPop" class="color-pop" hidden>
+        <div class="swatches" id="colorSwatches"></div>
+        <label class="custom-row"><span data-i18n="custom"></span><input type="color" id="hlColor" value="#ffd400" /></label>
+      </div>
       <div id="speedPop" hidden>
         <small data-i18n="blockSpeed"></small>
         <div>
@@ -681,25 +688,7 @@
           ><select data-s="theme">
             <option value="dark">Dark</option>
             <option value="light">Light</option>
-            <option value="custom">Custom</option>
-          </select></label
-        ><label class="fld"
-          ><span data-i18n="selection"></span
-          ><span class="sel-colors"><button class="ic" id="btnFg" aria-label="Text color" title="Text color — applies to selected text">
-            <svg class="i"><use href="#i-color" /></svg><i class="dot" id="fgDot"></i></button
-          ><button class="ic" id="btnBg" aria-label="Highlight color" title="Highlight color — applies to selected text">
-            <svg class="i"><use href="#i-bg" /></svg><i class="dot" id="bgDot"></i></button></span></label
-        ><div id="colorPop" class="color-pop" hidden>
-          <div class="swatches" id="colorSwatches"></div>
-          <label class="custom-row"><span data-i18n="custom"></span><input type="color" id="hlColor" value="#ffd400" /></label>
-        </div>
-        <label class="fld"
-          ><span data-i18n="bgColor"></span
-          ><input type="color" data-s="bgColor" /></label
-        ><label class="fld"
-          ><span data-i18n="fgColor"></span
-          ><input type="color" data-s="fgColor"
-        /></label>
+          </select></label>
       </div>
     </dialog>
     <dialog id="dlgSettings" class="sheet">
