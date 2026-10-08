@@ -44,7 +44,8 @@ export function createMedia({ $, store, cam, prompter, applyStyle, transport }) 
       alert(t("noCam"));
     }
   };
-  if ($("mRec")) $("mRec").onclick = toggleRec;
+  // NOTE: #mRec is wired in dialogs.js via onRecord so the
+  // More menu closes first, then recording starts.
   $("dlgRec").addEventListener("close", () => $("recVideo").pause());
 
   return { toggleCam, toggleRec };

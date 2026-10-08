@@ -1,7 +1,7 @@
 import { toggleFullscreen, rotateScreen } from "./fullscreen.js";
 
 // All dialog open/close wiring lives here so app.js stays orchestration-only.
-export function initDialogs({ $, store, cam, pip, list, applyStyle, onCamera }) {
+export function initDialogs({ $, store, cam, pip, list, applyStyle, onCamera, onRecord }) {
   // ---------- anchored non-modal text popup near #btnText ----------
   const dlgText = $("dlgText");
   function positionDlgText() {
@@ -58,6 +58,7 @@ export function initDialogs({ $, store, cam, pip, list, applyStyle, onCamera }) 
   via("mFs", () => toggleFullscreen());
   via("mRot", () => rotateScreen());
   via("mPip", () => pip.toggle());
+  if ($("mRec")) $("mRec").onclick = () => { $("dlgMenu").close(); onRecord?.(); };
   // record entry lives in the More menu now (wired in record.js so the
   // recording indicator can toggle even with no footer button)
   // footer transport-bar fullscreen toggle (same action as menu)

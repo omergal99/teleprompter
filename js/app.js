@@ -176,7 +176,7 @@ const pip = {
   },
 };
 
-initDialogs({ $, store, cam, pip, list, applyStyle, onCamera: media.toggleCam });
+initDialogs({ $, store, cam, pip, list, applyStyle, onCamera: media.toggleCam, onRecord: media.toggleRec });
 initHotkeys({
   $,
   store,
